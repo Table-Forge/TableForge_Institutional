@@ -161,7 +161,7 @@ export default function ParaLojasPage() {
                   {...register("email")}
                 />
                 <Input
-                  label="WhatsApp / Telefone"
+                  label="Telefone / Celular para contato"
                   placeholder="(00) 00000-0000"
                   error={errors.phone?.message}
                   {...register("phone")}

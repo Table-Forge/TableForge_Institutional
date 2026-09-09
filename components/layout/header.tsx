@@ -3,8 +3,9 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Flame, Menu, X, Shield } from "lucide-react";
+import { Menu, X, Shield, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
 
 const navLinks = [
   { href: "/", label: "Início" },
@@ -22,18 +23,8 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[#2D2D2D] bg-[#000000]/90 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-lg bg-[#ff2400]/15 border border-[#ff2400]/40 flex items-center justify-center text-[#ff2400] group-hover:bg-[#ff2400]/25 transition-colors">
-            <Flame className="w-5 h-5 fill-[#ff2400]" />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold text-lg tracking-tight text-[#faf3e0] group-hover:text-white transition-colors">
-              TableForge
-            </span>
-            <span className="text-[10px] uppercase font-semibold tracking-wider text-[#ff2400] -mt-1">
-              O Ponto de Encontro
-            </span>
-          </div>
+        <Link href="/" className="flex items-center gap-2 group">
+          <Logo variant="horizontal" priority />
         </Link>
 
         <nav className="hidden md:flex items-center gap-1 lg:gap-2">
@@ -65,9 +56,10 @@ export function Header() {
               Painel
             </Button>
           </Link>
-          <Link href="/taverna">
+          <Link href="/#baixar-app">
             <Button size="sm" variant="primary">
-              Entrar na Forja
+              <Smartphone className="w-3.5 h-3.5" />
+              Baixar o App
             </Button>
           </Link>
         </div>
@@ -104,9 +96,10 @@ export function Header() {
             );
           })}
           <div className="pt-3 border-t border-[#2D2D2D] flex flex-col gap-2">
-            <Link href="/taverna" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link href="/#baixar-app" onClick={() => setIsMobileMenuOpen(false)}>
               <Button size="md" variant="primary" className="w-full">
-                Entrar na Forja
+                <Smartphone className="w-4 h-4" />
+                Baixar o App TableForge
               </Button>
             </Link>
           </div>

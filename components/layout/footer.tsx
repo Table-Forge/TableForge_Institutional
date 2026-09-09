@@ -1,7 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import { Flame, Mail, Heart } from "lucide-react";
+import { Mail, Heart } from "lucide-react";
 import { GithubIcon, TwitterIcon, InstagramIcon } from "@/components/ui/icons";
+import { Logo } from "@/components/ui/logo";
+import { AppDownloadButtons } from "@/components/ui/app-download-buttons";
 
 export function Footer() {
   return (
@@ -9,14 +11,11 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
           <div className="space-y-4 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-[#ff2400]/15 border border-[#ff2400]/40 flex items-center justify-center text-[#ff2400]">
-                <Flame className="w-4 h-4 fill-[#ff2400]" />
-              </div>
-              <span className="font-bold text-lg text-[#faf3e0]">TableForge</span>
+            <Link href="/" className="inline-block">
+              <Logo variant="horizontal" />
             </Link>
             <p className="text-xs text-[#A1A1A1] leading-relaxed">
-              O ponto de encontro do RPG e jogos de tabuleiro. Conectando jogadores, mestres, lojas e eventos em um só ecossistema.
+              O ponto de encontro do RPG e jogos de tabuleiro. Encontre jogadores por geolocalização e reserve mesas em lojas parceiras direto no aplicativo.
             </p>
             <div className="flex items-center gap-3 text-[#A1A1A1]">
               <a
@@ -78,7 +77,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/taverna" className="hover:text-[#faf3e0] transition-colors">
-                  A Taverna (Comunidade)
+                  A Taverna (Fórum da Comunidade)
                 </Link>
               </li>
             </ul>
@@ -112,14 +111,15 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-[#faf3e0] mb-3">
-              Acesso
+          <div className="space-y-3">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-[#faf3e0]">
+              Baixe o Aplicativo
             </h4>
-            <p className="text-xs text-[#A1A1A1] leading-relaxed mb-3">
-              Entre para a Beta privada ou torne sua loja uma pioneira credenciada da nossa rede.
+            <p className="text-xs text-[#A1A1A1] leading-relaxed">
+              Encontre jogadores e campanhas ativas no seu bairro diretamente pelo app.
             </p>
-            <div className="space-y-2">
+            <AppDownloadButtons size="sm" />
+            <div className="pt-2">
               <Link
                 href="/para-lojas"
                 className="inline-block text-xs font-medium text-[#ff2400] hover:underline"

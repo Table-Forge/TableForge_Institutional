@@ -32,13 +32,13 @@ export default function SobrePage() {
           Por que criamos o TableForge?
         </h2>
         <p>
-          Durante anos, organizar uma campanha de RPG ou encontrar um grupo de board games significou a mesma rotina exaustiva: mandar mensagens em grupos abandonados de Facebook, criar mais um canal de Discord com 50 notificações silenciadas, perder fichas de personagens em pastas de Drive e torcer para que os jogadores confirmem presença.
+          Durante anos, organizar uma campanha de RPG ou encontrar um grupo de board games significou a mesma rotina exaustiva: mandar mensagens em grupos abandonados em redes sociais convencionais, criar mais um canal de chat temporário com dezenas de notificações silenciadas, perder fichas de personagens em pastas desorganizadas e torcer para que os jogadores confirmem presença.
         </p>
         <p>
           Pior ainda: quem se muda de cidade ou quer experimentar mesas presenciais fica completamente à deriva. As lojas físicas possuem mesas vazias durante a semana, enquanto dezenas de jogadores na mesma região não sabem onde jogar nem com quem se conectar.
         </p>
         <p className="font-semibold text-[#faf3e0] border-l-2 border-[#ff2400] pl-4 italic">
-          O TableForge não é apenas um gerenciador de campanhas. Ele é a ponte viva entre o universo digital e presencial do hobby.
+          O TableForge foi criado para que você encontre sua party diretamente pelo aplicativo móvel através de geolocalização, reservando mesas e conectando pessoas reais. A Taverna complementa essa experiência como o arquivo permanente de conhecimento da nossa comunidade.
         </p>
       </div>
 
