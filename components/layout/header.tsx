@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Shield, Smartphone } from "lucide-react";
+import { Menu, X, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
 
@@ -50,12 +50,6 @@ export function Header() {
         </nav>
 
         <div className="hidden sm:flex items-center gap-3">
-          <Link href="https://tableforge.com.br" target="_blank" rel="noopener noreferrer">
-            <Button size="sm" variant="outline" className="hidden lg:inline-flex">
-              <Shield className="w-3.5 h-3.5" />
-              Painel
-            </Button>
-          </Link>
           <Link href="/#baixar-app">
             <Button size="sm" variant="primary">
               <Smartphone className="w-3.5 h-3.5" />
