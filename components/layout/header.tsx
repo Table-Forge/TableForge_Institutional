@@ -22,9 +22,9 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[#2D2D2D] bg-[#000000]/90 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 group">
-          <Logo variant="horizontal" priority />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 lg:h-24 flex items-center justify-between">
+        <Link href="/" className="inline-flex items-center group py-2">
+          <Logo variant="split" priority />
         </Link>
 
         <nav className="hidden md:flex items-center gap-1 lg:gap-2">

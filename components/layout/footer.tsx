@@ -10,9 +10,9 @@ export function Footer() {
     <footer className="border-t border-[#2D2D2D] bg-[#000000] text-[#D1D1D1] mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
-          <div className="space-y-4 md:col-span-1">
+          <div className="space-y-4">
             <Link href="/" className="inline-block">
-              <Logo variant="horizontal" />
+              <Logo variant="split" />
             </Link>
             <p className="text-xs text-[#A1A1A1] leading-relaxed">
               O ponto de encontro do RPG e jogos de tabuleiro. Encontre jogadores por geolocalização e reserve mesas em lojas parceiras direto no aplicativo.

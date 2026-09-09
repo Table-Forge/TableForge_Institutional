@@ -3,12 +3,36 @@ import Image from "next/image";
 import { BRAND_LOGOS } from "@/constants/logos";
 
 export interface ILogo {
-  variant?: "horizontal" | "vertical" | "mark";
+  variant?: "horizontal" | "vertical" | "mark" | "split";
   className?: string;
   priority?: boolean;
 }
 
 export function Logo({ variant = "horizontal", className = "", priority = false }: ILogo) {
+  if (variant === "split") {
+    return (
+      <div className={`inline-flex items-center gap-1.5 sm:gap-2 ${className}`}>
+        <div className="relative h-11 w-11 sm:h-14 sm:w-14 shrink-0">
+          <Image
+            src={BRAND_LOGOS.local.markDark}
+            alt="TableForge Mark"
+            fill
+            priority={priority}
+            className="object-contain"
+          />
+        </div>
+        <div className="relative h-6 w-28 sm:h-8 sm:w-36 shrink-0">
+          <Image
+            src={BRAND_LOGOS.local.textDark}
+            alt="TableForge"
+            fill
+            priority={priority}
+            className="object-contain"
+          />
+        </div>
+      </div>
+    );
+  }
   if (variant === "mark") {
     return (
       <div className={`relative w-8 h-8 ${className}`}>
