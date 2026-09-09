@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: #3a3a3a;
+  --color-secondary: #ff2400;
+  --color-tertiary: #ff2400;
+  --color-tertiary_10: rgba(255, 36, 0, 0.1);
+  --color-tertiary_20: rgba(255, 36, 0, 0.2);
+  --color-tertiary_30: rgba(255, 36, 0, 0.3);
+  --color-tertiary_50: rgba(255, 36, 0, 0.05);
+  --color-white: #faf3e0;
+  --color-black: #000000;
+  --color-background: #000000;
+  --color-danger: #ff2400;
+  --color-grays_50: #F1F1F1;
+  --color-grays_100: #D1D1D1;
+  --color-grays_200: #A1A1A1;
+  --color-grays_300: #717171;
+  --color-grays_400: #4A4A4A;
+  --color-grays_500: #2D2D2D;
+  --color-grays_600: #1E1E1E;
+
+  --background: var(--color-background);
+  --foreground: var(--color-white);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: #3a3a3a;
+  --color-secondary: #ff2400;
+  --color-tertiary: #ff2400;
+  --color-white: #faf3e0;
+  --color-black: #000000;
+  --color-danger: #ff2400;
+  --color-grays-50: #F1F1F1;
+  --color-grays-100: #D1D1D1;
+  --color-grays-200: #A1A1A1;
+  --color-grays-300: #717171;
+  --color-grays-400: #4A4A4A;
+  --color-grays-500: #2D2D2D;
+  --color-grays-600: #1E1E1E;
+}
+
+body {
+  background-color: #000000;
+  color: #faf3e0;
+  font-family: var(--font-sans, "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1E1E1E;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff2400;
+}
