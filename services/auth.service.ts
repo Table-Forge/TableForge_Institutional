@@ -1,61 +1,52 @@
-import { ILoginForm, IRegisterForm, IAuthUser } from "@/schemas/auth.schema";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
+import { api } from "@/services/api";
+import {
+  ILoginForm,
+  IRegisterForm,
+  IAuthUser,
+  ILoginResponse,
+  LoginResponseSchema,
+  AuthUserSchema,
+} from "@/schemas/auth.schema";
 
 export interface IAuthResult {
   token: string;
   user: IAuthUser;
+  refreshToken?: string | null;
 }
+
+const formatDateOnly = (date: Date | string): string => {
+  if (typeof date === "string") {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) return date;
+    const parsed = new Date(date);
+    if (!isNaN(parsed.getTime())) {
+      return parsed.toISOString().split("T")[0];
+    }
+    return date;
+  }
+  return date.toISOString().split("T")[0];
+};
 
 export const AuthService = {
   login: async (credentials: ILoginForm): Promise<IAuthResult> => {
-    if (API_BASE_URL) {
-      try {
-        const query = new URLSearchParams({
-          login: credentials.login,
-          password: credentials.password,
-        });
-
-        const response = await fetch(`${API_BASE_URL}/users/authenticate?${query.toString()}`, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          const user = data.user || data;
-          const token = data.token?.value || data.token || "";
-
-          return {
-            token,
-            user: {
-              id: user.id || Date.now(),
-              username: user.username || credentials.login,
-              nickname: user.nickname || user.username || credentials.login,
-              email: user.email || credentials.login,
-              avatarUrl: user.avatarUrl || null,
-              badge: "FerreiroFundador",
-            },
-          };
-        }
-      } catch {
-        // Fallback
-      }
-    }
-
-    await new Promise((resolve) => setTimeout(resolve, 400));
-    return {
-      token: `mock_jwt_token_${Date.now()}`,
-      user: {
-        id: 42,
-        username: credentials.login.includes("@") ? credentials.login.split("@")[0] : credentials.login,
-        nickname: credentials.login.includes("@") ? credentials.login.split("@")[0] : credentials.login,
-        email: credentials.login.includes("@") ? credentials.login : `${credentials.login}@tableforge.com.br`,
-        avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
-        badge: "FerreiroFundador",
+    const { data } = await api.post("/users/authenticate", null, {
+      params: {
+        login: credentials.login,
+        password: credentials.password,
       },
+    });
+
+    const parsed: ILoginResponse = LoginResponseSchema.parse(data);
+    const token = parsed.token?.value ?? "";
+    const user = (parsed.user ?? {}) as IAuthUser;
+    const refreshToken = parsed.refreshToken?.value ?? null;
+
+    return {
+      token,
+      user: {
+        ...user,
+        badge: user.badge || "FerreiroFundador",
+      },
+      refreshToken,
     };
   },
 
@@ -64,43 +55,33 @@ export const AuthService = {
       username: data.username,
       nickname: data.nickname,
       email: data.email,
-      birthDate: data.birthDate,
+      birthDate: formatDateOnly(data.birthDate),
       password: data.password,
     };
 
-    if (API_BASE_URL) {
-      try {
-        const response = await fetch(`${API_BASE_URL}/users/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify(payload),
-        });
+    await api.post("/users/register", payload);
 
-        if (response.ok) {
-          return AuthService.login({
-            login: data.email,
-            password: data.password,
-          });
-        }
-      } catch {
-        // Fallback
-      }
-    }
+    return AuthService.login({
+      login: data.email,
+      password: data.password,
+    });
+  },
 
-    await new Promise((resolve) => setTimeout(resolve, 500));
+  getProfile: async (id: number): Promise<IAuthUser> => {
+    const { data } = await api.get(`/users/${id}`);
+    const user = AuthUserSchema.parse(data);
     return {
-      token: `mock_jwt_token_${Date.now()}`,
-      user: {
-        id: Date.now(),
-        username: data.username,
-        nickname: data.nickname,
-        email: data.email,
-        avatarUrl: null,
-        badge: "FerreiroFundador",
-      },
+      ...user,
+      badge: user.badge || "FerreiroFundador",
     };
+  },
+
+  logout: async (refreshToken?: string | null): Promise<void> => {
+    if (!refreshToken) return;
+    try {
+      await api.post("/users/logout", { refreshToken });
+    } catch {
+      return;
+    }
   },
 };

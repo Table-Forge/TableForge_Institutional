@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, Smartphone, LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
 import { useAuth } from "@/context/auth-context";
+import { toImageSource } from "@/utils/image";
 
 const navLinks = [
   { href: "/", label: "Início" },
@@ -20,7 +22,16 @@ const navLinks = [
 export function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [failedAvatarUrl, setFailedAvatarUrl] = useState<string | null>(null);
   const { user, isAuthenticated, openAuthModal, logout } = useAuth();
+
+  const avatarSource = toImageSource(user?.avatarUrl);
+  const hasValidAvatar = Boolean(avatarSource && failedAvatarUrl !== avatarSource);
+  const displayName = user?.nickname || user?.username || "Aventureiro";
+  const handleName = user?.username
+    ? `@${user.username}`
+    : `@${displayName.toLowerCase().replace(/\s+/g, "")}`;
+  const initial = (user?.nickname || user?.username || "A")[0]?.toUpperCase();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[#2D2D2D] bg-[#000000]/90 backdrop-blur-md">
@@ -54,20 +65,38 @@ export function Header() {
         <div className="hidden sm:flex items-center gap-3">
           {isAuthenticated ? (
             <div className="flex items-center gap-2 pl-2">
-              <div className="w-8 h-8 rounded-full bg-[#ff2400]/20 border border-[#ff2400]/50 flex items-center justify-center text-xs font-bold text-[#faf3e0]">
-                {user?.nickname?.[0]?.toUpperCase() || user?.username?.[0]?.toUpperCase() || "U"}
-              </div>
-              <div className="hidden lg:flex flex-col text-left">
-                <span className="text-xs font-bold text-[#faf3e0] leading-tight">
-                  {user?.nickname || user?.username}
-                </span>
-                <span className="text-[10px] text-[#ff2400] font-medium">
-                  {user?.badge || "Aventureiro"}
-                </span>
-              </div>
+              <Link
+                href="/perfil"
+                className="group flex items-center gap-2.5 rounded-lg p-1 transition-colors hover:bg-[#1E1E1E]"
+                title="Meu Perfil"
+              >
+                <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#ff2400]/40 bg-[#ff2400]/15 text-xs font-bold text-[#faf3e0] overflow-hidden transition-all group-hover:border-[#ff2400]/80 group-hover:ring-2 group-hover:ring-[#ff2400]/30">
+                  {hasValidAvatar ? (
+                    <Image
+                      src={avatarSource}
+                      alt={displayName}
+                      fill
+                      unoptimized
+                      onError={() => setFailedAvatarUrl(avatarSource)}
+                      className="object-cover"
+                    />
+                  ) : (
+                    initial
+                  )}
+                  <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-[#000000] z-10" />
+                </div>
+                <div className="hidden lg:flex flex-col text-left">
+                  <span className="text-xs font-bold text-[#faf3e0] leading-tight group-hover:text-white transition-colors truncate max-w-[130px]">
+                    {displayName}
+                  </span>
+                  <span className="text-[10px] text-[#A1A1A1] leading-tight truncate max-w-[130px]">
+                    {handleName}
+                  </span>
+                </div>
+              </Link>
               <button
                 onClick={logout}
-                className="p-1.5 rounded-lg text-[#A1A1A1] hover:text-[#ff2400] hover:bg-[#1E1E1E] transition-colors ml-1"
+                className="p-1.5 rounded-lg text-[#A1A1A1] hover:text-[#ff2400] hover:bg-[#1E1E1E] transition-colors ml-0.5 cursor-pointer"
                 title="Sair da conta"
                 aria-label="Sair da conta"
               >
@@ -128,25 +157,42 @@ export function Header() {
           <div className="pt-3 border-t border-[#2D2D2D] flex flex-col gap-2">
             {isAuthenticated ? (
               <div className="flex items-center justify-between p-3 rounded-lg bg-[#141414] border border-[#2D2D2D]">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full bg-[#ff2400]/20 border border-[#ff2400]/50 flex items-center justify-center text-xs font-bold text-[#faf3e0]">
-                    {user?.nickname?.[0]?.toUpperCase() || user?.username?.[0]?.toUpperCase() || "U"}
+                <Link
+                  href="/perfil"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center gap-2.5 group flex-1 min-w-0"
+                >
+                  <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#ff2400]/40 bg-[#ff2400]/15 text-xs font-bold text-[#faf3e0] overflow-hidden">
+                    {hasValidAvatar ? (
+                      <Image
+                        src={avatarSource}
+                        alt={displayName}
+                        fill
+                        unoptimized
+                        onError={() => setFailedAvatarUrl(avatarSource)}
+                        className="object-cover"
+                      />
+                    ) : (
+                      initial
+                    )}
+                    <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-[#141414] z-10" />
                   </div>
-                  <div className="flex flex-col text-left">
-                    <span className="text-xs font-bold text-[#faf3e0]">
-                      {user?.nickname || user?.username}
+                  <div className="flex flex-col text-left min-w-0">
+                    <span className="text-xs font-bold text-[#faf3e0] group-hover:text-white transition-colors truncate">
+                      {displayName}
                     </span>
-                    <span className="text-[10px] text-[#ff2400]">
-                      {user?.badge || "Aventureiro"}
+                    <span className="text-[10px] text-[#A1A1A1] truncate">
+                      {handleName}
                     </span>
                   </div>
-                </div>
+                </Link>
                 <button
                   onClick={() => {
                     logout();
                     setIsMobileMenuOpen(false);
                   }}
-                  className="text-xs text-red-400 hover:text-red-300 flex items-center gap-1 p-1"
+                  className="text-xs text-red-400 hover:text-red-300 flex items-center gap-1 p-1.5 rounded-md hover:bg-[#1E1E1E] transition-colors cursor-pointer ml-2 shrink-0"
+                  title="Sair da conta"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   <span>Sair</span>

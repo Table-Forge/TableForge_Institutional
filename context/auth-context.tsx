@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useSyncExternalStore } from "react";
 import { IAuthUser, ILoginForm, IRegisterForm } from "@/schemas/auth.schema";
 import { AuthService } from "@/services/auth.service";
+import { AUTH_STORAGE_KEY } from "@/services/api";
 
 interface IAuthContext {
   user: IAuthUser | null;
@@ -14,13 +15,11 @@ interface IAuthContext {
   closeAuthModal: () => void;
   login: (credentials: ILoginForm) => Promise<void>;
   register: (data: IRegisterForm) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
-
-const TOKEN_KEY = "tableforge_token";
-const USER_KEY = "tableforge_user";
 
 function subscribe(callback: () => void) {
   if (typeof window === "undefined") return () => {};
@@ -32,14 +31,13 @@ function subscribe(callback: () => void) {
   };
 }
 
-function getStoredToken() {
+function getStoredAuthData(): string | null {
   if (typeof window === "undefined") return null;
-  return localStorage.getItem(TOKEN_KEY);
-}
-
-function getStoredUser() {
-  if (typeof window === "undefined") return null;
-  return localStorage.getItem(USER_KEY);
+  return (
+    localStorage.getItem(AUTH_STORAGE_KEY) ||
+    localStorage.getItem("auth_data") ||
+    localStorage.getItem("tableforge_user")
+  );
 }
 
 function notifyAuthChange() {
@@ -52,17 +50,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalTab, setAuthModalTab] = useState<"login" | "register">("login");
 
-  const token = useSyncExternalStore(subscribe, getStoredToken, () => null);
-  const rawUser = useSyncExternalStore(subscribe, getStoredUser, () => null);
+  const rawAuthData = useSyncExternalStore(subscribe, getStoredAuthData, () => null);
 
-  const user: IAuthUser | null = React.useMemo(() => {
-    if (!rawUser) return null;
-    try {
-      return JSON.parse(rawUser) as IAuthUser;
-    } catch {
-      return null;
+  const { user, token, refreshToken } = React.useMemo(() => {
+    if (!rawAuthData) {
+      return { user: null, token: null, refreshToken: null };
     }
-  }, [rawUser]);
+
+    try {
+      const parsed = JSON.parse(rawAuthData);
+      if (parsed.user && (parsed.token || parsed.token?.value)) {
+        const tokenValue =
+          typeof parsed.token === "string"
+            ? parsed.token
+            : parsed.token?.value || "";
+        return {
+          user: parsed.user as IAuthUser,
+          token: tokenValue,
+          refreshToken: parsed.refreshToken?.value || parsed.refreshToken || null,
+        };
+      }
+
+      const tokenValue = localStorage.getItem("tableforge_token") || "";
+      return {
+        user: parsed as IAuthUser,
+        token: tokenValue,
+        refreshToken: null,
+      };
+    } catch {
+      return { user: null, token: null, refreshToken: null };
+    }
+  }, [rawAuthData]);
 
   const openAuthModal = (tab: "login" | "register" = "login") => {
     setAuthModalTab(tab);
@@ -75,24 +93,63 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (credentials: ILoginForm) => {
     const result = await AuthService.login(credentials);
-    localStorage.setItem(TOKEN_KEY, result.token);
-    localStorage.setItem(USER_KEY, JSON.stringify(result.user));
+    const sessionData = {
+      token: { value: result.token },
+      user: result.user,
+      refreshToken: result.refreshToken ? { value: result.refreshToken } : null,
+    };
+
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(sessionData));
+    localStorage.setItem("auth_data", JSON.stringify(sessionData));
+    localStorage.setItem("tableforge_token", result.token);
+    localStorage.setItem("tableforge_user", JSON.stringify(result.user));
+
     notifyAuthChange();
     closeAuthModal();
   };
 
   const register = async (data: IRegisterForm) => {
     const result = await AuthService.register(data);
-    localStorage.setItem(TOKEN_KEY, result.token);
-    localStorage.setItem(USER_KEY, JSON.stringify(result.user));
+    const sessionData = {
+      token: { value: result.token },
+      user: result.user,
+      refreshToken: result.refreshToken ? { value: result.refreshToken } : null,
+    };
+
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(sessionData));
+    localStorage.setItem("auth_data", JSON.stringify(sessionData));
+    localStorage.setItem("tableforge_token", result.token);
+    localStorage.setItem("tableforge_user", JSON.stringify(result.user));
+
     notifyAuthChange();
     closeAuthModal();
   };
 
-  const logout = () => {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
+  const logout = async () => {
+    await AuthService.logout(refreshToken);
+    localStorage.removeItem(AUTH_STORAGE_KEY);
+    localStorage.removeItem("auth_data");
+    localStorage.removeItem("tableforge_token");
+    localStorage.removeItem("tableforge_user");
     notifyAuthChange();
+  };
+
+  const refreshUser = async () => {
+    if (!user?.id) return;
+    try {
+      const updatedUser = await AuthService.getProfile(user.id);
+      const sessionData = {
+        token: { value: token || "" },
+        user: updatedUser,
+        refreshToken: refreshToken ? { value: refreshToken } : null,
+      };
+      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(sessionData));
+      localStorage.setItem("auth_data", JSON.stringify(sessionData));
+      localStorage.setItem("tableforge_user", JSON.stringify(updatedUser));
+      notifyAuthChange();
+    } catch {
+      return;
+    }
   };
 
   return (
@@ -108,6 +165,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         register,
         logout,
+        refreshUser,
       }}
     >
       {children}
