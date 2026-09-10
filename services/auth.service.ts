@@ -8,12 +8,6 @@ import {
   AuthUserSchema,
 } from "@/schemas/auth.schema";
 
-export interface IAuthResult {
-  token: string;
-  user: IAuthUser;
-  refreshToken?: string | null;
-}
-
 const formatDateOnly = (date: Date | string): string => {
   if (typeof date === "string") {
     if (/^\d{4}-\d{2}-\d{2}$/.test(date)) return date;
@@ -27,7 +21,7 @@ const formatDateOnly = (date: Date | string): string => {
 };
 
 export const AuthService = {
-  login: async (credentials: ILoginForm): Promise<IAuthResult> => {
+  login: async (credentials: ILoginForm): Promise<ILoginResponse> => {
     const { data } = await api.post("/users/authenticate", null, {
       params: {
         login: credentials.login,
@@ -35,22 +29,19 @@ export const AuthService = {
       },
     });
 
-    const parsed: ILoginResponse = LoginResponseSchema.parse(data);
-    const token = parsed.token?.value ?? "";
-    const user = (parsed.user ?? {}) as IAuthUser;
-    const refreshToken = parsed.refreshToken?.value ?? null;
-
+    const parsed = LoginResponseSchema.parse(data);
     return {
-      token,
-      user: {
-        ...user,
-        badge: user.badge || "FerreiroFundador",
-      },
-      refreshToken,
+      ...parsed,
+      user: parsed.user
+        ? {
+            ...parsed.user,
+            badge: parsed.user.badge || "FerreiroFundador",
+          }
+        : parsed.user,
     };
   },
 
-  register: async (data: IRegisterForm): Promise<IAuthResult> => {
+  register: async (data: IRegisterForm): Promise<ILoginResponse> => {
     const payload = {
       username: data.username,
       nickname: data.nickname,

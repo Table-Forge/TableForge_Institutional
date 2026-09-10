@@ -1,16 +1,9 @@
 import axios from "axios";
-
-export const AUTH_STORAGE_KEY = "tableforge_auth";
-
-const getBaseUrl = () => {
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    return process.env.NEXT_PUBLIC_API_URL;
-  }
-  return "http://localhost:5017";
-};
+import { ENV } from "@/config/env";
+import { AUTH_STORAGE_KEY, useBoundStore } from "@/store";
 
 const api = axios.create({
-  baseURL: getBaseUrl(),
+  baseURL: ENV.API_URL,
   timeout: 60000,
   headers: {
     Accept: "application/json",
@@ -20,26 +13,18 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   if (typeof window === "undefined") return config;
 
-  const authDataSerialized =
-    localStorage.getItem(AUTH_STORAGE_KEY) ||
-    localStorage.getItem("auth_data") ||
-    localStorage.getItem("tableforge_token");
+  const authDataSerialized = localStorage.getItem(AUTH_STORAGE_KEY);
 
   if (authDataSerialized) {
     try {
-      let tokenValue = "";
+      const authData = JSON.parse(authDataSerialized) as {
+        token?: { value?: string } | string;
+      };
 
-      if (authDataSerialized.startsWith("{")) {
-        const authData = JSON.parse(authDataSerialized) as {
-          token?: { value?: string } | string;
-        };
-        tokenValue =
-          typeof authData.token === "string"
-            ? authData.token
-            : authData.token?.value || "";
-      } else {
-        tokenValue = authDataSerialized;
-      }
+      const tokenValue =
+        typeof authData.token === "string"
+          ? authData.token
+          : authData.token?.value;
 
       if (tokenValue) {
         config.headers.Authorization = `Bearer ${tokenValue}`;
@@ -55,15 +40,11 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401 && typeof window !== "undefined") {
-      localStorage.removeItem(AUTH_STORAGE_KEY);
-      localStorage.removeItem("auth_data");
-      localStorage.removeItem("tableforge_token");
-      localStorage.removeItem("tableforge_user");
-      window.dispatchEvent(new Event("tableforge_auth_change"));
+    if (error.response?.status === 401) {
+      useBoundStore.getState().signOut();
     }
     return Promise.reject(error);
-  },
+  }
 );
 
-export { api };
+export { api, AUTH_STORAGE_KEY };
