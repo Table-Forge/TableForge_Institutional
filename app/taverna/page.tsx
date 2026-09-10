@@ -9,11 +9,13 @@ import { CreateTopicModal } from "@/components/taverna/create-topic-modal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Search, MessageSquare, Sparkles } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 
 export default function TavernaHubPage() {
   const [topics, setTopics] = useState<ITavernaTopic[]>(initialTavernaTopics);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const { isAuthenticated, openAuthModal } = useAuth();
 
   const handleTopicCreated = (newTopic: ITavernaTopic) => {
     setTopics((prev) => [newTopic, ...prev]);
@@ -47,7 +49,13 @@ export default function TavernaHubPage() {
         <Button
           size="lg"
           variant="primary"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            if (!isAuthenticated) {
+              openAuthModal("login");
+            } else {
+              setIsModalOpen(true);
+            }
+          }}
           className="shrink-0 shadow-lg shadow-[#ff2400]/20"
         >
           <PlusCircle className="w-4 h-4" />

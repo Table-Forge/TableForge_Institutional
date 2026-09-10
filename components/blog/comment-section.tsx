@@ -6,9 +6,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IBlogComment, CreateCommentSchema, ICreateCommentForm } from "@/schemas/blog.schema";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MessageSquare, Send } from "lucide-react";
+import { MessageSquare, Send, LogIn } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 
 export interface ICommentSection {
   postId: number;
@@ -19,6 +19,7 @@ export function CommentSection({ postId, initialComments }: ICommentSection) {
   const [comments, setComments] = useState<IBlogComment[]>(initialComments);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
+  const { user, isAuthenticated, openAuthModal } = useAuth();
 
   const {
     register,
@@ -30,13 +31,17 @@ export function CommentSection({ postId, initialComments }: ICommentSection) {
   });
 
   const onSubmit = (data: ICreateCommentForm) => {
+    if (!isAuthenticated || !user) {
+      openAuthModal("login");
+      return;
+    }
     setIsSubmitting(true);
     setTimeout(() => {
       const newComment: IBlogComment = {
         id: Date.now(),
         postId,
-        authorName: data.authorName,
-        authorAvatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+        authorName: user.nickname || user.username || data.authorName || "Aventureiro",
+        authorAvatarUrl: user.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
         content: data.content,
         createdAtUtc: new Date().toISOString(),
       };
@@ -57,35 +62,49 @@ export function CommentSection({ postId, initialComments }: ICommentSection) {
         </h3>
       </div>
 
-      <div className="bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl p-6 space-y-4">
-        <h4 className="text-sm font-semibold text-[#faf3e0]">Deixe seu comentário</h4>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <Input
-            label="Seu Nome ou Apelido"
-            placeholder="Ex: Mestre Arcano"
-            error={errors.authorName?.message}
-            {...register("authorName")}
-          />
-          <Textarea
-            label="Mensagem"
-            placeholder="Compartilhe suas ideias ou dúvidas sobre este artigo..."
-            rows={3}
-            error={errors.content?.message}
-            {...register("content")}
-          />
-          <div className="flex items-center justify-between">
-            {successMessage ? (
-              <span className="text-xs text-green-400 font-medium">
-                Comentário publicado com sucesso!
-              </span>
-            ) : <span />}
-            <Button type="submit" size="sm" isLoading={isSubmitting}>
-              <Send className="w-3.5 h-3.5" />
-              Publicar Comentário
-            </Button>
+      {!isAuthenticated ? (
+        <div className="bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl p-6 text-center space-y-3">
+          <p className="text-sm font-semibold text-[#faf3e0]">
+            Faça login para comentar neste artigo
+          </p>
+          <p className="text-xs text-[#A1A1A1] max-w-sm mx-auto leading-relaxed">
+            Participe dos debates de artigos e guias conectando-se à sua conta TableForge.
+          </p>
+          <Button size="sm" variant="outline" onClick={() => openAuthModal("login")}>
+            <LogIn className="w-3.5 h-3.5 text-[#ff2400]" />
+            <span>Entrar ou Cadastrar</span>
+          </Button>
+        </div>
+      ) : (
+        <div className="bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl p-6 space-y-4">
+          <div className="flex items-center justify-between pb-2 border-b border-[#2D2D2D]">
+            <h4 className="text-sm font-semibold text-[#faf3e0]">Deixe seu comentário</h4>
+            <span className="text-xs text-[#A1A1A1]">
+              Comentando como <strong className="text-[#faf3e0]">{user?.nickname || user?.username}</strong>
+            </span>
           </div>
-        </form>
-      </div>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <Textarea
+              label="Mensagem"
+              placeholder="Compartilhe suas ideias ou dúvidas sobre este artigo..."
+              rows={3}
+              error={errors.content?.message}
+              {...register("content")}
+            />
+            <div className="flex items-center justify-between">
+              {successMessage ? (
+                <span className="text-xs text-green-400 font-medium">
+                  Comentário publicado com sucesso!
+                </span>
+              ) : <span />}
+              <Button type="submit" size="sm" isLoading={isSubmitting}>
+                <Send className="w-3.5 h-3.5" />
+                Publicar Comentário
+              </Button>
+            </div>
+          </form>
+        </div>
+      )}
 
       <div className="space-y-4">
         {comments.map((comment) => {

@@ -3,9 +3,10 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Smartphone } from "lucide-react";
+import { Menu, X, Smartphone, LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
+import { useAuth } from "@/context/auth-context";
 
 const navLinks = [
   { href: "/", label: "Início" },
@@ -19,6 +20,7 @@ const navLinks = [
 export function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, isAuthenticated, openAuthModal, logout } = useAuth();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[#2D2D2D] bg-[#000000]/90 backdrop-blur-md">
@@ -50,6 +52,40 @@ export function Header() {
         </nav>
 
         <div className="hidden sm:flex items-center gap-3">
+          {isAuthenticated ? (
+            <div className="flex items-center gap-2 pl-2">
+              <div className="w-8 h-8 rounded-full bg-[#ff2400]/20 border border-[#ff2400]/50 flex items-center justify-center text-xs font-bold text-[#faf3e0]">
+                {user?.nickname?.[0]?.toUpperCase() || user?.username?.[0]?.toUpperCase() || "U"}
+              </div>
+              <div className="hidden lg:flex flex-col text-left">
+                <span className="text-xs font-bold text-[#faf3e0] leading-tight">
+                  {user?.nickname || user?.username}
+                </span>
+                <span className="text-[10px] text-[#ff2400] font-medium">
+                  {user?.badge || "Aventureiro"}
+                </span>
+              </div>
+              <button
+                onClick={logout}
+                className="p-1.5 rounded-lg text-[#A1A1A1] hover:text-[#ff2400] hover:bg-[#1E1E1E] transition-colors ml-1"
+                title="Sair da conta"
+                aria-label="Sair da conta"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </div>
+          ) : (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => openAuthModal("login")}
+              className="flex items-center gap-1.5"
+            >
+              <LogIn className="w-3.5 h-3.5 text-[#ff2400]" />
+              <span>Entrar</span>
+            </Button>
+          )}
+
           <Link href="/#baixar-app">
             <Button size="sm" variant="primary">
               <Smartphone className="w-3.5 h-3.5" />
@@ -90,6 +126,47 @@ export function Header() {
             );
           })}
           <div className="pt-3 border-t border-[#2D2D2D] flex flex-col gap-2">
+            {isAuthenticated ? (
+              <div className="flex items-center justify-between p-3 rounded-lg bg-[#141414] border border-[#2D2D2D]">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full bg-[#ff2400]/20 border border-[#ff2400]/50 flex items-center justify-center text-xs font-bold text-[#faf3e0]">
+                    {user?.nickname?.[0]?.toUpperCase() || user?.username?.[0]?.toUpperCase() || "U"}
+                  </div>
+                  <div className="flex flex-col text-left">
+                    <span className="text-xs font-bold text-[#faf3e0]">
+                      {user?.nickname || user?.username}
+                    </span>
+                    <span className="text-[10px] text-[#ff2400]">
+                      {user?.badge || "Aventureiro"}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    logout();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="text-xs text-red-400 hover:text-red-300 flex items-center gap-1 p-1"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>Sair</span>
+                </button>
+              </div>
+            ) : (
+              <Button
+                size="md"
+                variant="outline"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  openAuthModal("login");
+                }}
+                className="w-full flex items-center justify-center gap-2"
+              >
+                <LogIn className="w-4 h-4 text-[#ff2400]" />
+                <span>Entrar na Forja</span>
+              </Button>
+            )}
+
             <Link href="/#baixar-app" onClick={() => setIsMobileMenuOpen(false)}>
               <Button size="md" variant="primary" className="w-full">
                 <Smartphone className="w-4 h-4" />

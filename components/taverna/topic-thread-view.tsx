@@ -10,7 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ReplyItem } from "@/components/taverna/reply-item";
-import { ArrowLeft, MessageSquare, ThumbsUp, Send, Pin, Lock } from "lucide-react";
+import { ArrowLeft, MessageSquare, ThumbsUp, Send, Pin, Lock, LogIn } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 
 export interface ITopicThreadView {
   topic: ITavernaTopic;
@@ -22,6 +23,7 @@ export function TopicThreadView({ topic, initialReplies }: ITopicThreadView) {
   const [topicVotes, setTopicVotes] = useState(topic.upvoteCount);
   const [hasVotedTopic, setHasVotedTopic] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user, isAuthenticated, openAuthModal } = useAuth();
 
   const formattedDate = new Date(topic.createdAtUtc).toLocaleDateString("pt-BR", {
     day: "2-digit",
@@ -41,6 +43,11 @@ export function TopicThreadView({ topic, initialReplies }: ITopicThreadView) {
   });
 
   const handleToggleTopicVote = () => {
+    if (!isAuthenticated) {
+      openAuthModal("login");
+      return;
+    }
+
     if (hasVotedTopic) {
       setTopicVotes((prev) => prev - 1);
       setHasVotedTopic(false);
@@ -51,17 +58,22 @@ export function TopicThreadView({ topic, initialReplies }: ITopicThreadView) {
   };
 
   const onSubmitReply = (data: ICreateReplyForm) => {
+    if (!isAuthenticated || !user) {
+      openAuthModal("login");
+      return;
+    }
+
     setIsSubmitting(true);
     setTimeout(() => {
       const newReply: ITavernaReply = {
         id: Date.now(),
         topicId: topic.id,
         author: {
-          userId: 99,
-          username: "aventureiro_taverna",
-          nickname: "Aventureiro da Forja",
-          avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
-          badge: "FerreiroFundador",
+          userId: user.id,
+          username: user.username,
+          nickname: user.nickname || user.username,
+          avatarUrl: user.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+          badge: (user.badge as ITavernaReply["author"]["badge"]) || "FerreiroFundador",
         },
         content: data.content,
         upvoteCount: 0,
@@ -182,9 +194,37 @@ export function TopicThreadView({ topic, initialReplies }: ITopicThreadView) {
         <div className="p-4 bg-[#2D2D2D] border border-[#3a3a3a] rounded-xl text-center text-xs text-[#A1A1A1]">
           Esta discussão foi trancada pela moderação. Não é possível enviar novas respostas.
         </div>
+      ) : !isAuthenticated ? (
+        <div className="bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl p-8 text-center space-y-4">
+          <div className="w-12 h-12 rounded-full bg-[#ff2400]/15 border border-[#ff2400]/30 flex items-center justify-center text-[#ff2400] mx-auto">
+            <LogIn className="w-6 h-6" />
+          </div>
+          <div className="space-y-1.5">
+            <h4 className="text-base font-bold text-[#faf3e0]">
+              Faça login para responder nesta discussão
+            </h4>
+            <p className="text-xs text-[#A1A1A1] max-w-md mx-auto leading-relaxed">
+              A Taverna é aberta para leitura livre de todos os aventureiros, mas para enviar respostas ou votar é necessário estar conectado à sua conta TableForge.
+            </p>
+          </div>
+          <div className="flex items-center justify-center gap-3 pt-2">
+            <Button size="sm" variant="primary" onClick={() => openAuthModal("login")}>
+              <LogIn className="w-3.5 h-3.5" />
+              <span>Entrar na Conta</span>
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => openAuthModal("register")}>
+              <span>Criar Conta Grátis</span>
+            </Button>
+          </div>
+        </div>
       ) : (
         <div className="bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl p-6 space-y-4">
-          <h4 className="text-sm font-semibold text-[#faf3e0]">Sua Resposta</h4>
+          <div className="flex items-center justify-between pb-2 border-b border-[#2D2D2D]">
+            <h4 className="text-sm font-semibold text-[#faf3e0]">Sua Resposta</h4>
+            <span className="text-xs text-[#A1A1A1]">
+              Respondendo como <strong className="text-[#faf3e0]">{user?.nickname || user?.username}</strong>
+            </span>
+          </div>
           <form onSubmit={handleSubmit(onSubmitReply)} className="space-y-4">
             <Textarea
               placeholder="Adicione seus pontos de vista, regras ou sugestões..."

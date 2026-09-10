@@ -8,6 +8,7 @@ import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/context/auth-context";
 
 export interface ICreateTopicModal {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export function CreateTopicModal({
   onTopicCreated,
 }: ICreateTopicModal) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user } = useAuth();
 
   const {
     register,
@@ -57,11 +59,11 @@ export function CreateTopicModal({
         slug: `${slug}-${Date.now().toString().slice(-4)}`,
         content: data.content,
         author: {
-          userId: 99,
-          username: "viajante_novo",
-          nickname: "Aventureiro da Forja",
-          avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
-          badge: "FerreiroFundador",
+          userId: user?.id || 1,
+          username: user?.username || "aventureiro",
+          nickname: user?.nickname || user?.username || "Aventureiro da Forja",
+          avatarUrl: user?.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+          badge: (user?.badge as ITavernaTopic["author"]["badge"]) || "FerreiroFundador",
         },
         viewCount: 1,
         replyCount: 0,

@@ -10,10 +10,12 @@ import { CreateTopicModal } from "@/components/taverna/create-topic-modal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, PlusCircle, Sparkles } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 
 export default function TavernaCategoryPage() {
   const params = useParams();
   const categorySlug = params.category as string;
+  const { isAuthenticated, openAuthModal } = useAuth();
 
   const category = initialTavernaCategories.find((c) => c.slug === categorySlug);
 
@@ -69,7 +71,13 @@ export default function TavernaCategoryPage() {
           <Button
             size="md"
             variant="primary"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              if (!isAuthenticated) {
+                openAuthModal("login");
+              } else {
+                setIsModalOpen(true);
+              }
+            }}
             className="shrink-0 shadow-lg shadow-[#ff2400]/20"
           >
             <PlusCircle className="w-4 h-4" />
