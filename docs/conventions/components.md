@@ -5,7 +5,8 @@ This document defines how we build, structure, and consume UI components in `Tab
 ---
 
 ## Reference implementations
-- [components/ui/button.tsx](../../components/ui/button.tsx) — Primitive button with visual variants and loading state.
+- [components/button/button.tsx](../../components/button/button.tsx) — Standard shared button with variant class maps, sizes, and loading state.
+- [components/button-icon/button-icon.tsx](../../components/button-icon/button-icon.tsx) — Standard icon button.
 - [components/ui/card.tsx](../../components/ui/card.tsx) — Surface container with default, surface, and interactive variants.
 - [components/taverna/topic-row.tsx](../../components/taverna/topic-row.tsx) — Composite domain component consuming badges, avatars and routing.
 
@@ -13,7 +14,7 @@ This document defines how we build, structure, and consume UI components in `Tab
 
 ## Where things live
 
-- **Shared UI primitives (`components/ui/`)**: Reusable building blocks agnostic to domain logic (`button.tsx`, `badge.tsx`, `card.tsx`, `input.tsx`, `textarea.tsx`, `modal.tsx`, `icons.tsx`).
+- **Shared UI primitives (`components/button/`, `components/button-icon/`, `components/ui/`)**: Reusable building blocks agnostic to domain logic (`button.tsx`, `button-icon.tsx`, `badge.tsx`, `card.tsx`, `input.tsx`, `textarea.tsx`, `modal.tsx`, `icons.tsx`).
 - **Controlled form components (`components/input/`, `components/label/`, `components/input-group/`, `components/error-message/`)**: React Hook Form controlled primitives (`input.default.controlled.tsx`, `input.password.tsx`, `password-requirements.tsx`, `input.date.controlled.tsx`, `input.masked.tsx`, `label.tsx`, `input-group.tsx`, `error-message.tsx`).
 - **Layout primitives (`components/layout/`)**: Structural components rendered across all pages (`header.tsx`, `footer.tsx`).
 - **Domain components (`components/blog/`, `components/taverna/`)**: Feature-specific components (`blog-card.tsx`, `comment-section.tsx`, `category-card.tsx`, `topic-row.tsx`, `reply-item.tsx`, `create-topic-modal.tsx`).
