@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X, Smartphone, LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
+import { KnightHeadIcon } from "@/components/ui/icons";
 import { useAuth } from "@/context/auth-context";
 import { toImageSource } from "@/utils/image";
 
@@ -31,7 +32,6 @@ export function Header() {
   const handleName = user?.username
     ? `@${user.username}`
     : `@${displayName.toLowerCase().replace(/\s+/g, "")}`;
-  const initial = (user?.nickname || user?.username || "A")[0]?.toUpperCase();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[#2D2D2D] bg-[#000000]/90 backdrop-blur-md">
@@ -81,7 +81,7 @@ export function Header() {
                       className="object-cover"
                     />
                   ) : (
-                    initial
+                    <KnightHeadIcon className="w-5 h-5 text-[#ff2400]" />
                   )}
                   <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-[#000000] z-10" />
                 </div>
@@ -173,7 +173,7 @@ export function Header() {
                         className="object-cover"
                       />
                     ) : (
-                      initial
+                      <KnightHeadIcon className="w-5 h-5 text-[#ff2400]" />
                     )}
                     <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-[#141414] z-10" />
                   </div>

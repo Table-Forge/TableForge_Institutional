@@ -8,6 +8,7 @@ import { useAuth } from "@/context/auth-context";
 import { toImageSource } from "@/utils/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { KnightHeadIcon } from "@/components/ui/icons";
 import {
   User,
   Mail,
@@ -32,7 +33,6 @@ export default function PerfilPage() {
   const handleName = user?.username
     ? `@${user.username}`
     : `@${displayName.toLowerCase().replace(/\s+/g, "")}`;
-  const initial = (user?.nickname || user?.username || "A")[0]?.toUpperCase();
 
   const formatDate = (dateValue?: string | Date | null) => {
     if (!dateValue) return "Não informada";
@@ -122,7 +122,7 @@ export default function PerfilPage() {
                 className="rounded-xl object-cover"
               />
             ) : (
-              initial
+              <KnightHeadIcon className="w-14 h-14 text-[#ff2400]" />
             )}
             <span className="absolute bottom-1 right-1 h-3.5 w-3.5 rounded-full bg-emerald-500 ring-2 ring-[#141414]" />
           </div>
