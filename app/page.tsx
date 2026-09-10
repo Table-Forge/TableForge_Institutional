@@ -8,6 +8,9 @@ import { BlogCard } from "@/components/blog/blog-card";
 import { TopicRow } from "@/components/taverna/topic-row";
 import { initialBlogPosts } from "@/data/blog.mock";
 import { initialTavernaTopics } from "@/data/taverna.mock";
+import { AppPreviewMockup } from "@/components/home/app-preview-mockup";
+import { DiceFeatureSection } from "@/components/home/dice-feature-section";
+import { SpacesEventsSection } from "@/components/home/spaces-events-section";
 import {
   Users,
   Shield,
@@ -83,61 +86,7 @@ export default function HomePage() {
             </div>
 
             <div className="lg:col-span-5 flex justify-center">
-              <div className="relative w-full max-w-sm rounded-3xl border-2 border-[#3a3a3a] bg-gradient-to-b from-[#2D2D2D] to-[#1E1E1E] p-4 shadow-2xl shadow-[#ff2400]/10">
-                <div className="w-full rounded-2xl bg-[#000000] border border-[#2D2D2D] p-4 space-y-4 text-xs text-[#faf3e0]">
-                  <div className="flex items-center justify-between pb-3 border-b border-[#2D2D2D]">
-                    <div className="flex items-center gap-2">
-                      <Navigation className="w-4 h-4 text-[#ff2400]" />
-                      <span className="font-bold">Parties Próximas (Raio: 15 km)</span>
-                    </div>
-                    <span className="text-[10px] bg-[#ff2400]/20 text-[#ff2400] px-2 py-0.5 rounded font-semibold">
-                      Ao Vivo
-                    </span>
-                  </div>
-
-                  <div className="space-y-2.5">
-                    <div className="p-3 rounded-lg bg-[#1E1E1E] border border-[#2D2D2D] space-y-1.5">
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-[#faf3e0]">Tormenta20: Fim dos Tempos</span>
-                        <span className="text-[10px] text-[#ff2400] font-semibold">1 vaga</span>
-                      </div>
-                      <p className="text-[11px] text-[#A1A1A1]">Mestre Valen • Sábados às 14h</p>
-                      <div className="flex items-center gap-1.5 text-[10px] text-[#717171]">
-                        <MapPin className="w-3 h-3 text-[#ff2400]" />
-                        <span>Mesa física em loja parceira (Centro)</span>
-                      </div>
-                    </div>
-
-                    <div className="p-3 rounded-lg bg-[#1E1E1E] border border-[#2D2D2D] space-y-1.5">
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-[#faf3e0]">D&D 5e: Curse of Strahd</span>
-                        <span className="text-[10px] text-green-400 font-semibold">2 vagas</span>
-                      </div>
-                      <p className="text-[11px] text-[#A1A1A1]">Narrador Arthur • Sextas às 19h</p>
-                      <div className="flex items-center gap-1.5 text-[10px] text-[#717171]">
-                        <MapPin className="w-3 h-3 text-[#ff2400]" />
-                        <span>A 4.2 km de você</span>
-                      </div>
-                    </div>
-
-                    <div className="p-3 rounded-lg bg-[#1E1E1E] border border-[#2D2D2D] space-y-1.5">
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-[#faf3e0]">Noite de Board Games Modernos</span>
-                        <span className="text-[10px] text-amber-400 font-semibold">Mesa aberta</span>
-                      </div>
-                      <p className="text-[11px] text-[#A1A1A1]">Catan, Wingspan e Terraforming Mars</p>
-                      <div className="flex items-center gap-1.5 text-[10px] text-[#717171]">
-                        <MapPin className="w-3 h-3 text-[#ff2400]" />
-                        <span>Dragão Geek Store • A 2.8 km</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pt-2 text-center">
-                    <p className="text-[10px] text-[#717171]">Simulação da interface do aplicativo TableForge</p>
-                  </div>
-                </div>
-              </div>
+              <AppPreviewMockup />
             </div>
           </div>
         </div>
@@ -205,6 +154,10 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <SpacesEventsSection />
+
+      <DiceFeatureSection />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">

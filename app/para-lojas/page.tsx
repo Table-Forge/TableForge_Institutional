@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PartnerLeadSchema, IPartnerLeadForm } from "@/schemas/partner.schema";
@@ -112,6 +113,25 @@ export default function ParaLojasPage() {
               <span>Canal direto com os fundadores e suporte prioritário para novos recursos de agendamento.</span>
             </li>
           </ul>
+
+          <div className="rounded-2xl border border-[#2D2D2D] bg-[#141414] p-5 space-y-3">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#faf3e0]">
+              <MapPin className="w-4 h-4 text-[#ff2400]" />
+              <span>Como seu espaço aparece no aplicativo:</span>
+            </div>
+            <p className="text-[11px] text-[#A1A1A1] leading-relaxed">
+              Jogadores da sua cidade visualizam sua loja, comodidades, quantidade de mesas disponíveis e podem solicitar reservas sem intermediários.
+            </p>
+            <div className="relative w-full max-w-[210px] mx-auto aspect-[450/919] rounded-xl overflow-hidden border border-[#2D2D2D] shadow-lg">
+              <Image
+                src="/app-screens/spaces.png"
+                alt="Exibição de Espaços no App TableForge"
+                fill
+                sizes="210px"
+                className="object-cover object-top"
+              />
+            </div>
+          </div>
         </div>
 
         <div className="lg:col-span-7 bg-[#1E1E1E] border border-[#2D2D2D] rounded-2xl p-6 sm:p-8">
