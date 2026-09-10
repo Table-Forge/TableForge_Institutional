@@ -27,7 +27,7 @@ export default function SobrePage() {
         </p>
       </div>
 
-      <div className="space-y-6 text-sm sm:text-base text-[#D1D1D1] leading-relaxed bg-[#1E1E1E] border border-[#2D2D2D] rounded-2xl p-6 sm:p-10">
+      <div className="space-y-6 text-sm sm:text-base text-[#D1D1D1] leading-relaxed bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl p-6 sm:p-10">
         <h2 className="text-xl sm:text-2xl font-bold text-[#faf3e0]">
           Por que criamos o TableForge?
         </h2>
@@ -93,7 +93,7 @@ export default function SobrePage() {
         </div>
       </div>
 
-      <div className="bg-gradient-to-r from-[#1E1E1E] via-[#2D2D2D] to-[#1E1E1E] border border-[#2D2D2D] rounded-2xl p-8 text-center space-y-4">
+      <div className="bg-gradient-to-r from-[#1E1E1E] via-[#2D2D2D] to-[#1E1E1E] border border-[#2D2D2D] rounded-xl p-8 text-center space-y-4">
         <h3 className="text-xl font-bold text-[#faf3e0]">
           Quer fazer parte da construção do TableForge?
         </h3>

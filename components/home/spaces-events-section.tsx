@@ -19,10 +19,10 @@ export function SpacesEventsSection() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
-        <div className="rounded-3xl border border-[#2D2D2D] bg-gradient-to-br from-[#1E1E1E] to-[#121212] p-6 sm:p-8 flex flex-col justify-between space-y-6 hover:border-[#ff2400]/40 transition-colors">
+        <div className="rounded-xl border border-[#2D2D2D] bg-gradient-to-br from-[#1E1E1E] to-[#121212] p-6 sm:p-8 flex flex-col justify-between space-y-6 hover:border-[#ff2400]/40 transition-colors">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-xl bg-amber-950/40 border border-amber-500/30 flex items-center justify-center text-amber-400">
+              <div className="w-10 h-10 rounded-lg bg-amber-950/40 border border-amber-500/30 flex items-center justify-center text-amber-400">
                 <MapPin className="w-5 h-5" />
               </div>
               <span className="text-xs font-semibold text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">
@@ -55,7 +55,7 @@ export function SpacesEventsSection() {
           </div>
 
           <div className="pt-4 flex flex-col sm:flex-row items-center gap-6">
-            <div className="relative w-full max-w-[210px] aspect-[450/919] rounded-2xl overflow-hidden border-2 border-[#2D2D2D] bg-[#0A0A0A] shadow-xl shrink-0">
+            <div className="relative w-full max-w-[210px] aspect-[450/919] rounded-xl overflow-hidden border-2 border-[#2D2D2D] bg-[#0A0A0A] shadow-xl shrink-0">
               <Image
                 src="/app-screens/spaces.png"
                 alt="Lista de Espaços no TableForge"
@@ -79,10 +79,10 @@ export function SpacesEventsSection() {
           </div>
         </div>
 
-        <div className="rounded-3xl border border-[#2D2D2D] bg-gradient-to-br from-[#1E1E1E] to-[#121212] p-6 sm:p-8 flex flex-col justify-between space-y-6 hover:border-[#ff2400]/40 transition-colors">
+        <div className="rounded-xl border border-[#2D2D2D] bg-gradient-to-br from-[#1E1E1E] to-[#121212] p-6 sm:p-8 flex flex-col justify-between space-y-6 hover:border-[#ff2400]/40 transition-colors">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-xl bg-cyan-950/40 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+              <div className="w-10 h-10 rounded-lg bg-cyan-950/40 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
                 <Calendar className="w-5 h-5" />
               </div>
               <span className="text-xs font-semibold text-cyan-400 bg-cyan-400/10 px-3 py-1 rounded-full border border-cyan-400/20">
@@ -115,7 +115,7 @@ export function SpacesEventsSection() {
           </div>
 
           <div className="pt-4 flex flex-col sm:flex-row items-center gap-6">
-            <div className="relative w-full max-w-[210px] aspect-[450/916] rounded-2xl overflow-hidden border-2 border-[#2D2D2D] bg-[#0A0A0A] shadow-xl shrink-0">
+            <div className="relative w-full max-w-[210px] aspect-[450/916] rounded-xl overflow-hidden border-2 border-[#2D2D2D] bg-[#0A0A0A] shadow-xl shrink-0">
               <Image
                 src="/app-screens/events.png"
                 alt="Lista de Eventos no TableForge"

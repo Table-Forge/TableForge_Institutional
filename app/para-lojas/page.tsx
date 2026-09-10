@@ -134,7 +134,7 @@ export default function ParaLojasPage() {
           </div>
         </div>
 
-        <div className="lg:col-span-7 bg-[#1E1E1E] border border-[#2D2D2D] rounded-2xl p-6 sm:p-8">
+        <div className="lg:col-span-7 bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl p-6 sm:p-8">
           {isSubmitted ? (
             <div className="text-center py-10 space-y-4">
               <div className="w-12 h-12 rounded-full bg-green-950/60 border border-green-500/40 text-green-400 flex items-center justify-center mx-auto">

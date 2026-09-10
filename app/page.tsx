@@ -93,7 +93,7 @@ export default function HomePage() {
       </section>
 
       <section id="baixar-app" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-br from-[#1E1E1E] via-[#2D2D2D] to-[#1E1E1E] border border-[#ff2400]/40 rounded-3xl p-8 lg:p-14 shadow-xl">
+        <div className="bg-gradient-to-br from-[#1E1E1E] via-[#2D2D2D] to-[#1E1E1E] border border-[#ff2400]/40 rounded-xl p-8 lg:p-14 shadow-xl">
           <div className="max-w-3xl mx-auto text-center space-y-4 mb-12">
             <Badge variant="primary" className="mx-auto">
               <Flame className="w-3.5 h-3.5 fill-[#ff2400]" />

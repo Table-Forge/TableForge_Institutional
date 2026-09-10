@@ -121,7 +121,7 @@ export default async function BlogPostPage({ params }: IBlogPostPageProps) {
           </div>
         </div>
 
-        <div className="relative h-72 sm:h-96 lg:h-[450px] w-full rounded-2xl overflow-hidden bg-[#2D2D2D]">
+        <div className="relative h-72 sm:h-96 lg:h-[450px] w-full rounded-xl overflow-hidden bg-[#2D2D2D]">
           <Image
             src={post.coverImageUrl}
             alt={post.title}

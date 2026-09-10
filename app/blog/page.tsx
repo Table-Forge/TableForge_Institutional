@@ -74,7 +74,7 @@ export default function BlogPage() {
       </div>
 
       {filteredPosts.length === 0 ? (
-        <div className="text-center py-16 bg-[#1E1E1E] border border-[#2D2D2D] rounded-2xl space-y-2">
+        <div className="text-center py-16 bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl space-y-2">
           <p className="text-base font-semibold text-[#faf3e0]">Nenhum artigo encontrado</p>
           <p className="text-xs text-[#A1A1A1]">Tente buscar por outros termos ou selecionar outra categoria.</p>
         </div>

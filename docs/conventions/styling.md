@@ -55,3 +55,7 @@ Community recognition badges follow specific thematic color accents:
 4. **Responsive design**: Use Tailwind's default breakpoints (`sm:`, `md:`, `lg:`, `xl:`).
 5. **No CSS-in-JS**: Do not install or import `styled-components` or `@emotion/styled`.
 6. **Button styling**: Buttons follow sleek, compact proportions with `rounded-lg` (and `rounded-md` for xs/sm, `rounded-xl` for xl), natural-case typography (`font-medium` / `font-semibold text-sm`), and scaled heights (`h-7` to `h-12`). They avoid bulky pill shapes (`rounded-2xl`) and forced uppercase, maintaining a clean, modern aesthetic.
+7. **Border-radius hierarchy**: UI elements strictly adhere to the unified border-radius standard:
+   - **Form controls and actions** (Buttons, Inputs, Textareas, Selects, Dropdowns, Nav items): `rounded-lg` (8px). Micro-elements (badges, tags, checkboxes) use `rounded-md` (6px) or `rounded-lg` (8px).
+   - **Surfaces and containers** (Cards, Tables, Modals, Bento boxes, Search capsules, Preview mockups): `rounded-xl` (12px).
+   - Bulky radii (`rounded-2xl` / 16px and `rounded-3xl` / 24px) are prohibited to ensure visual lightness, density, and consistency with the dark medieval HUD design system.

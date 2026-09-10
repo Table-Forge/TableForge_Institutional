@@ -21,7 +21,7 @@ export function BlogCard({ post, featured = false }: IBlogCard) {
     return (
       <Link
         href={`/blog/${post.slug}`}
-        className="group grid grid-cols-1 lg:grid-cols-12 gap-6 bg-[#1E1E1E] border border-[#2D2D2D] hover:border-[#ff2400]/50 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#ff2400]/5"
+        className="group grid grid-cols-1 lg:grid-cols-12 gap-6 bg-[#1E1E1E] border border-[#2D2D2D] hover:border-[#ff2400]/50 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[#ff2400]/5"
       >
         <div className="lg:col-span-7 relative h-64 lg:h-full min-h-[280px] w-full bg-[#2D2D2D]">
           <Image

@@ -123,7 +123,7 @@ export default function TavernaCategoryPage() {
       </div>
 
       {categoryTopics.length === 0 ? (
-        <div className="text-center py-16 bg-[#1E1E1E] border border-[#2D2D2D] rounded-2xl space-y-3">
+        <div className="text-center py-16 bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl space-y-3">
           <Sparkles className="w-8 h-8 text-[#A1A1A1] mx-auto" />
           <p className="text-base font-semibold text-[#faf3e0]">Nenhuma discussão nesta categoria ainda</p>
           <p className="text-xs text-[#A1A1A1] max-w-sm mx-auto">

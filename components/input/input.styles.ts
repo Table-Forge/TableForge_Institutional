@@ -4,7 +4,7 @@ export const getInputClasses = (
   disabled?: boolean,
 ) => {
   const base =
-    "flex h-11 w-full min-w-[80px] items-center overflow-hidden rounded-xl border bg-[#1E1E1E] transition-all duration-200 shadow-sm";
+    "flex h-11 w-full min-w-[80px] items-center overflow-hidden rounded-lg border bg-[#1E1E1E] transition-all duration-200 shadow-sm";
   const border = error
     ? "border-red-500 focus-within:ring-2 focus-within:ring-red-500/25"
     : "border-[#3a3a3a] focus-within:border-[#ff2400] focus-within:ring-2 focus-within:ring-[#ff2400]/25";

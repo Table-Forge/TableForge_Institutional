@@ -41,7 +41,7 @@ const DICE_FEATURES: IDiceFeature[] = [
 export function DiceFeatureSection() {
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="relative overflow-hidden rounded-3xl border border-[#ff2400]/40 bg-gradient-to-b from-[#1E1E1E] via-[#121212] to-[#0A0A0A] p-8 sm:p-12 lg:p-16 shadow-2xl">
+      <div className="relative overflow-hidden rounded-xl border border-[#ff2400]/40 bg-gradient-to-b from-[#1E1E1E] via-[#121212] to-[#0A0A0A] p-8 sm:p-12 lg:p-16 shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#ff2400]/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
 
         <div className="max-w-3xl mx-auto text-center space-y-4 mb-12 sm:mb-16 relative z-10">
@@ -63,7 +63,7 @@ export function DiceFeatureSection() {
             return (
               <div
                 key={feature.title}
-                className="group rounded-2xl bg-[#171717] border border-[#2D2D2D] hover:border-[#ff2400]/50 transition-all duration-300 p-5 flex flex-col justify-between space-y-5"
+                className="group rounded-xl bg-[#171717] border border-[#2D2D2D] hover:border-[#ff2400]/50 transition-all duration-300 p-5 flex flex-col justify-between space-y-5"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
@@ -82,7 +82,7 @@ export function DiceFeatureSection() {
                   </p>
                 </div>
 
-                <div className="relative w-full max-w-[240px] mx-auto aspect-[450/915] rounded-2xl overflow-hidden border border-[#2D2D2D] bg-[#0A0A0A] shadow-lg group-hover:shadow-[#ff2400]/10 transition-shadow">
+                <div className="relative w-full max-w-[240px] mx-auto aspect-[450/915] rounded-xl overflow-hidden border border-[#2D2D2D] bg-[#0A0A0A] shadow-lg group-hover:shadow-[#ff2400]/10 transition-shadow">
                   <Image
                     src={feature.imageSrc}
                     alt={feature.title}
