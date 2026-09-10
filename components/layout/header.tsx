@@ -70,19 +70,21 @@ export function Header() {
                 className="group flex items-center gap-2.5 rounded-lg p-1 transition-colors hover:bg-[#1E1E1E]"
                 title="Meu Perfil"
               >
-                <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#ff2400]/40 bg-[#ff2400]/15 text-xs font-bold text-[#faf3e0] overflow-hidden transition-all group-hover:border-[#ff2400]/80 group-hover:ring-2 group-hover:ring-[#ff2400]/30">
-                  {hasValidAvatar ? (
-                    <Image
-                      src={avatarSource}
-                      alt={displayName}
-                      fill
-                      unoptimized
-                      onError={() => setFailedAvatarUrl(avatarSource)}
-                      className="object-cover"
-                    />
-                  ) : (
-                    <KnightHeadIcon className="w-5 h-5 text-[#ff2400]" />
-                  )}
+                <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#ff2400]/40 bg-[#ff2400]/15 text-xs font-bold text-[#faf3e0] transition-all group-hover:border-[#ff2400]/80 group-hover:ring-2 group-hover:ring-[#ff2400]/30">
+                  <div className="relative h-full w-full rounded-full overflow-hidden flex items-center justify-center">
+                    {hasValidAvatar ? (
+                      <Image
+                        src={avatarSource}
+                        alt={displayName}
+                        fill
+                        unoptimized
+                        onError={() => setFailedAvatarUrl(avatarSource)}
+                        className="object-cover rounded-full"
+                      />
+                    ) : (
+                      <KnightHeadIcon className="w-5 h-5 text-[#ff2400]" />
+                    )}
+                  </div>
                   <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-[#000000] z-10" />
                 </div>
                 <div className="hidden lg:flex flex-col text-left">
@@ -162,19 +164,21 @@ export function Header() {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="flex items-center gap-2.5 group flex-1 min-w-0"
                 >
-                  <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#ff2400]/40 bg-[#ff2400]/15 text-xs font-bold text-[#faf3e0] overflow-hidden">
-                    {hasValidAvatar ? (
-                      <Image
-                        src={avatarSource}
-                        alt={displayName}
-                        fill
-                        unoptimized
-                        onError={() => setFailedAvatarUrl(avatarSource)}
-                        className="object-cover"
-                      />
-                    ) : (
-                      <KnightHeadIcon className="w-5 h-5 text-[#ff2400]" />
-                    )}
+                  <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#ff2400]/40 bg-[#ff2400]/15 text-xs font-bold text-[#faf3e0]">
+                    <div className="relative h-full w-full rounded-full overflow-hidden flex items-center justify-center">
+                      {hasValidAvatar ? (
+                        <Image
+                          src={avatarSource}
+                          alt={displayName}
+                          fill
+                          unoptimized
+                          onError={() => setFailedAvatarUrl(avatarSource)}
+                          className="object-cover rounded-full"
+                        />
+                      ) : (
+                        <KnightHeadIcon className="w-5 h-5 text-[#ff2400]" />
+                      )}
+                    </div>
                     <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-[#141414] z-10" />
                   </div>
                   <div className="flex flex-col text-left min-w-0">

@@ -53,6 +53,9 @@ export function useAuth() {
     const refreshToken = authData?.refreshToken?.value;
     await AuthService.logout(refreshToken);
     signOutStore();
+    if (typeof window !== "undefined") {
+      window.location.href = "/";
+    }
   };
 
   const refreshUser = async () => {

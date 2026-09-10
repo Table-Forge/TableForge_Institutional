@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { QueryProvider } from "@/components/providers/query-provider";
 import { AuthProvider } from "@/context/auth-context";
 import { AuthModal } from "@/components/auth/auth-modal";
 
@@ -44,13 +45,15 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-[#000000] text-[#faf3e0]">
-        <AuthProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <AuthModal />
-          <div id="root-portal" />
-        </AuthProvider>
+        <QueryProvider>
+          <AuthProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <AuthModal />
+            <div id="root-portal" />
+          </AuthProvider>
+        </QueryProvider>
       </body>
     </html>
   );

@@ -3,12 +3,15 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
 import { toImageSource } from "@/utils/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { KnightHeadIcon } from "@/components/ui/icons";
+import { useUserTypeEnum } from "@/features/users/hooks/enums/use-user-type-enum";
+import { useUserStatusEnum } from "@/features/users/hooks/enums/use-user-status-enum";
+import { useUserGenderEnum } from "@/features/users/hooks/enums/use-user-gender-enum";
+import { UserStatus } from "@/components/user-status/user-status";
 import {
   User,
   Mail,
@@ -20,12 +23,14 @@ import {
   MessagesSquare,
   Smartphone,
   Hash,
+  Pencil,
 } from "lucide-react";
+import { EditProfileModal } from "@/components/profile/edit-profile-modal";
 
 export default function PerfilPage() {
   const { user, isAuthenticated, logout, openAuthModal } = useAuth();
-  const router = useRouter();
   const [failedAvatarUrl, setFailedAvatarUrl] = useState<string | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const avatarSource = toImageSource(user?.avatarUrl);
   const hasValidAvatar = Boolean(avatarSource && failedAvatarUrl !== avatarSource);
@@ -33,6 +38,27 @@ export default function PerfilPage() {
   const handleName = user?.username
     ? `@${user.username}`
     : `@${displayName.toLowerCase().replace(/\s+/g, "")}`;
+
+  const { typeEnum } = useUserTypeEnum(Boolean(user));
+  const { statusEnum } = useUserStatusEnum(Boolean(user));
+  const { genderEnum } = useUserGenderEnum({
+    enabled: Boolean(user),
+    filterAllowed: false,
+  });
+
+  const userTypeLabel =
+    typeEnum.find(
+      (item) => String(item.value).toLowerCase() === String(user?.type ?? "").toLowerCase(),
+    )?.name ||
+    user?.type ||
+    "Jogador";
+
+  const userGenderLabel =
+    genderEnum.find(
+      (item) => String(item.value).toLowerCase() === String(user?.gender ?? "").toLowerCase(),
+    )?.name ||
+    user?.gender ||
+    "Não informado";
 
   const formatDate = (dateValue?: string | Date | null) => {
     if (!dateValue) return "Não informada";
@@ -51,7 +77,6 @@ export default function PerfilPage() {
 
   const handleLogout = async () => {
     await logout();
-    router.push("/");
   };
 
   if (!isAuthenticated || !user) {
@@ -96,35 +121,48 @@ export default function PerfilPage() {
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Voltar ao início</span>
         </Link>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleLogout}
-          className="text-red-400 hover:text-red-300 border-red-500/30 hover:border-red-500/60"
-        >
-          <LogOut className="w-3.5 h-3.5" />
-          <span>Sair da conta</span>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsEditModalOpen(true)}
+            className="flex items-center gap-1.5"
+          >
+            <Pencil className="w-3.5 h-3.5 text-[#ff2400]" />
+            <span>Editar Perfil</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleLogout}
+            className="text-red-400 hover:text-red-300 border-red-500/30 hover:border-red-500/60"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Sair da conta</span>
+          </Button>
+        </div>
       </div>
 
       <div className="rounded-xl border border-[#2D2D2D] bg-[#141414] p-6 sm:p-8 relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-80 h-80 bg-[#ff2400]/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 relative z-10">
-          <div className="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border-2 border-[#ff2400]/40 bg-[#ff2400]/15 text-2xl font-black text-[#faf3e0] overflow-hidden shadow-inner">
-            {hasValidAvatar ? (
-              <Image
-                src={avatarSource}
-                alt={displayName}
-                fill
-                unoptimized
-                onError={() => setFailedAvatarUrl(avatarSource)}
-                className="rounded-xl object-cover"
-              />
-            ) : (
-              <KnightHeadIcon className="w-14 h-14 text-[#ff2400]" />
-            )}
-            <span className="absolute bottom-1 right-1 h-3.5 w-3.5 rounded-full bg-emerald-500 ring-2 ring-[#141414]" />
+          <div className="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-full border-2 border-[#ff2400]/40 bg-[#ff2400]/15 text-2xl font-black text-[#faf3e0] shadow-inner">
+            <div className="relative h-full w-full rounded-full overflow-hidden flex items-center justify-center">
+              {hasValidAvatar ? (
+                <Image
+                  src={avatarSource}
+                  alt={displayName}
+                  fill
+                  unoptimized
+                  onError={() => setFailedAvatarUrl(avatarSource)}
+                  className="rounded-full object-cover"
+                />
+              ) : (
+                <KnightHeadIcon className="w-14 h-14 text-[#ff2400]" />
+              )}
+            </div>
+            <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full bg-emerald-500 ring-2 ring-[#141414] z-10" />
           </div>
 
           <div className="flex-1 text-center sm:text-left space-y-2">
@@ -143,16 +181,13 @@ export default function PerfilPage() {
             </p>
 
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 pt-1 text-xs text-[#A1A1A1]">
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 inline-block" />
-                Sessão Ativa
-              </span>
+              <UserStatus value={user.status} options={statusEnum} />
               <span>•</span>
               <span>ID #{user.id}</span>
               {user.type && (
                 <>
                   <span>•</span>
-                  <span className="capitalize">{user.type}</span>
+                  <span>{userTypeLabel}</span>
                 </>
               )}
             </div>
@@ -239,8 +274,17 @@ export default function PerfilPage() {
               <p className="text-xs text-[#A1A1A1] flex items-center gap-1.5">
                 <Shield className="w-3.5 h-3.5" /> Tipo de Aventureiro
               </p>
-              <p className="text-sm font-semibold text-[#faf3e0] mt-0.5 capitalize">
-                {user.type || "Jogador"}
+              <p className="text-sm font-semibold text-[#faf3e0] mt-0.5">
+                {userTypeLabel}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-xs text-[#A1A1A1] flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5" /> Identidade de Gênero
+              </p>
+              <p className="text-sm font-semibold text-[#faf3e0] mt-0.5">
+                {userGenderLabel}
               </p>
             </div>
 
@@ -275,6 +319,12 @@ export default function PerfilPage() {
           </Link>
         </div>
       </div>
+
+      <EditProfileModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        user={user}
+      />
     </div>
   );
 }

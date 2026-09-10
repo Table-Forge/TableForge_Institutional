@@ -33,12 +33,12 @@ export default function EquipePage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
         {initialTeamMembers.map((member) => (
           <Card key={member.id} variant="surface" className="flex flex-col sm:flex-row gap-6 items-start">
-            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-[#1E1E1E] shrink-0 border border-[#3a3a3a]">
+            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-[#1E1E1E] shrink-0 border border-[#3a3a3a]">
               <Image
                 src={member.avatarUrl}
                 alt={member.name}
                 fill
-                className="object-cover"
+                className="object-cover rounded-full"
               />
             </div>
 
