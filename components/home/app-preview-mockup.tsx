@@ -75,7 +75,7 @@ export function AppPreviewMockup() {
           <div className="w-2 h-2 rounded-full bg-[#ff2400]/60" />
         </div>
 
-        <div className="relative w-full aspect-[450/915] rounded-[1.85rem] overflow-hidden bg-black border border-[#1E1E1E]">
+        <div className="relative w-full aspect-[450/915] rounded-[1.85rem] overflow-hidden bg-black">
           <Image
             src={activeScreen.src}
             alt={activeScreen.label}

@@ -114,7 +114,7 @@ export default function ParaLojasPage() {
             </li>
           </ul>
 
-          <div className="rounded-2xl border border-[#2D2D2D] bg-[#141414] p-5 space-y-3">
+          <div className="rounded-xl border border-[#2D2D2D] bg-[#141414] p-5 space-y-3">
             <div className="flex items-center gap-2 text-xs font-bold text-[#faf3e0]">
               <MapPin className="w-4 h-4 text-[#ff2400]" />
               <span>Como seu espaço aparece no aplicativo:</span>
@@ -122,14 +122,16 @@ export default function ParaLojasPage() {
             <p className="text-[11px] text-[#A1A1A1] leading-relaxed">
               Jogadores da sua cidade visualizam sua loja, comodidades, quantidade de mesas disponíveis e podem solicitar reservas sem intermediários.
             </p>
-            <div className="relative w-full max-w-[210px] mx-auto aspect-[450/919] rounded-xl overflow-hidden border border-[#2D2D2D] shadow-lg">
-              <Image
-                src="/app-screens/spaces.png"
-                alt="Exibição de Espaços no App TableForge"
-                fill
-                sizes="210px"
-                className="object-cover object-top"
-              />
+            <div className="w-full max-w-[218px] mx-auto p-2 rounded-xl bg-black border border-[#2D2D2D]">
+              <div className="relative w-full aspect-[450/919] rounded-lg overflow-hidden">
+                <Image
+                  src="/app-screens/spaces.png"
+                  alt="Exibição de Espaços no App TableForge"
+                  fill
+                  sizes="210px"
+                  className="object-cover object-top"
+                />
+              </div>
             </div>
           </div>
         </div>

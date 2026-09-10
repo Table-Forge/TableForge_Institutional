@@ -55,14 +55,16 @@ export function SpacesEventsSection() {
           </div>
 
           <div className="pt-4 flex flex-col sm:flex-row items-center gap-6">
-            <div className="relative w-full max-w-[210px] aspect-[450/919] rounded-xl overflow-hidden border-2 border-[#2D2D2D] bg-[#0A0A0A] shadow-xl shrink-0">
-              <Image
-                src="/app-screens/spaces.png"
-                alt="Lista de Espaços no TableForge"
-                fill
-                sizes="210px"
-                className="object-cover object-top"
-              />
+            <div className="w-full max-w-[218px] p-2 rounded-xl bg-black border border-[#2D2D2D] shrink-0">
+              <div className="relative w-full aspect-[450/919] rounded-lg overflow-hidden">
+                <Image
+                  src="/app-screens/spaces.png"
+                  alt="Lista de Espaços no TableForge"
+                  fill
+                  sizes="210px"
+                  className="object-cover object-top"
+                />
+              </div>
             </div>
 
             <div className="space-y-3 w-full sm:w-auto">
@@ -115,14 +117,16 @@ export function SpacesEventsSection() {
           </div>
 
           <div className="pt-4 flex flex-col sm:flex-row items-center gap-6">
-            <div className="relative w-full max-w-[210px] aspect-[450/916] rounded-xl overflow-hidden border-2 border-[#2D2D2D] bg-[#0A0A0A] shadow-xl shrink-0">
-              <Image
-                src="/app-screens/events.png"
-                alt="Lista de Eventos no TableForge"
-                fill
-                sizes="210px"
-                className="object-cover object-top"
-              />
+            <div className="w-full max-w-[218px] p-2 rounded-xl bg-black border border-[#2D2D2D] shrink-0">
+              <div className="relative w-full aspect-[450/916] rounded-lg overflow-hidden">
+                <Image
+                  src="/app-screens/events.png"
+                  alt="Lista de Eventos no TableForge"
+                  fill
+                  sizes="210px"
+                  className="object-cover object-top"
+                />
+              </div>
             </div>
 
             <div className="space-y-3 w-full sm:w-auto">

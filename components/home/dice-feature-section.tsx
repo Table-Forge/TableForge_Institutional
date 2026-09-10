@@ -82,14 +82,16 @@ export function DiceFeatureSection() {
                   </p>
                 </div>
 
-                <div className="relative w-full max-w-[240px] mx-auto aspect-[450/915] rounded-xl overflow-hidden border border-[#2D2D2D] bg-[#0A0A0A] shadow-lg group-hover:shadow-[#ff2400]/10 transition-shadow">
-                  <Image
-                    src={feature.imageSrc}
-                    alt={feature.title}
-                    fill
-                    sizes="(max-width: 768px) 240px, 280px"
-                    className="object-cover object-top"
-                  />
+                <div className="w-full max-w-[248px] mx-auto p-2 rounded-xl bg-black border border-[#2D2D2D]">
+                  <div className="relative w-full aspect-[450/915] rounded-lg overflow-hidden">
+                    <Image
+                      src={feature.imageSrc}
+                      alt={feature.title}
+                      fill
+                      sizes="(max-width: 768px) 240px, 280px"
+                      className="object-cover object-top"
+                    />
+                  </div>
                 </div>
               </div>
             );
