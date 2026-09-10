@@ -14,6 +14,7 @@ This document defines how we build, structure, and consume UI components in `Tab
 ## Where things live
 
 - **Shared UI primitives (`components/ui/`)**: Reusable building blocks agnostic to domain logic (`button.tsx`, `badge.tsx`, `card.tsx`, `input.tsx`, `textarea.tsx`, `modal.tsx`, `icons.tsx`).
+- **Controlled form components (`components/input/`, `components/label/`, `components/input-group/`, `components/error-message/`)**: React Hook Form controlled primitives (`input.default.controlled.tsx`, `input.password.tsx`, `password-requirements.tsx`, `input.date.controlled.tsx`, `input.masked.tsx`, `label.tsx`, `input-group.tsx`, `error-message.tsx`).
 - **Layout primitives (`components/layout/`)**: Structural components rendered across all pages (`header.tsx`, `footer.tsx`).
 - **Domain components (`components/blog/`, `components/taverna/`)**: Feature-specific components (`blog-card.tsx`, `comment-section.tsx`, `category-card.tsx`, `topic-row.tsx`, `reply-item.tsx`, `create-topic-modal.tsx`).
 

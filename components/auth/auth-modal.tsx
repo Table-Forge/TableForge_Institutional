@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   LoginSchema,
@@ -11,8 +11,13 @@ import {
 } from "@/schemas/auth.schema";
 import { useAuth } from "@/context/auth-context";
 import { Modal } from "@/components/ui/modal";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { InputGroup } from "@/components/input-group/input-group";
+import { Label } from "@/components/label/label";
+import { ControlledInput } from "@/components/input/input.default.controlled";
+import { PasswordInput } from "@/components/input/input.password";
+import { PasswordRequirements } from "@/components/input/password-requirements";
+import { DateInput } from "@/components/input/input.date.controlled";
 import { Flame, UserCheck, LogIn } from "lucide-react";
 
 export function AuthModal() {
@@ -23,7 +28,7 @@ export function AuthModal() {
   const isLoginTab = authModalTab === "login";
 
   const loginForm = useForm<ILoginForm>({
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(LoginSchema) as Resolver<ILoginForm>,
     defaultValues: {
       login: "",
       password: "",
@@ -31,14 +36,21 @@ export function AuthModal() {
   });
 
   const registerForm = useForm<IRegisterForm>({
-    resolver: zodResolver(RegisterSchema),
+    resolver: zodResolver(RegisterSchema) as Resolver<IRegisterForm>,
+    mode: "onChange",
     defaultValues: {
       username: "",
       nickname: "",
       email: "",
+      birthDate: "",
       password: "",
-      birthDate: "2000-01-01",
+      confirmPassword: "",
     },
+  });
+
+  const passwordValue = useWatch({
+    control: registerForm.control,
+    name: "password",
   });
 
   const onSubmitLogin = async (data: ILoginForm) => {
@@ -119,20 +131,29 @@ export function AuthModal() {
 
         {isLoginTab ? (
           <form onSubmit={loginForm.handleSubmit(onSubmitLogin)} className="space-y-4">
-            <Input
-              label="E-mail ou Usuário"
-              placeholder="ex: aventureiro@email.com"
-              error={loginForm.formState.errors.login?.message}
-              {...loginForm.register("login")}
-            />
+            <InputGroup>
+              <Label htmlFor="login" isRequired>
+                E-mail ou Usuário
+              </Label>
+              <ControlledInput
+                hookForm={loginForm}
+                name="login"
+                placeholder="ex: aventureiro@email.com"
+                error={loginForm.formState.errors.login?.message}
+              />
+            </InputGroup>
 
-            <Input
-              label="Senha"
-              type="password"
-              placeholder="••••••••"
-              error={loginForm.formState.errors.password?.message}
-              {...loginForm.register("password")}
-            />
+            <InputGroup>
+              <Label htmlFor="password" isRequired>
+                Senha
+              </Label>
+              <PasswordInput
+                hookForm={loginForm}
+                name="password"
+                placeholder="••••••••"
+                error={loginForm.formState.errors.password?.message}
+              />
+            </InputGroup>
 
             <Button
               type="submit"
@@ -156,42 +177,82 @@ export function AuthModal() {
           </form>
         ) : (
           <form onSubmit={registerForm.handleSubmit(onSubmitRegister)} className="space-y-3.5">
-            <Input
-              label="Nome de Usuário (@handle)"
-              placeholder="ex: arthur_mestre"
-              error={registerForm.formState.errors.username?.message}
-              {...registerForm.register("username")}
-            />
+            <InputGroup>
+              <Label htmlFor="username" isRequired>
+                Nome de Usuário (@handle)
+              </Label>
+              <ControlledInput
+                hookForm={registerForm}
+                name="username"
+                placeholder="ex: arthur_mestre"
+                error={registerForm.formState.errors.username?.message}
+              />
+            </InputGroup>
 
-            <Input
-              label="Apelido na Taverna"
-              placeholder="ex: Arthur Pendelton"
-              error={registerForm.formState.errors.nickname?.message}
-              {...registerForm.register("nickname")}
-            />
+            <InputGroup>
+              <Label htmlFor="nickname" isRequired>
+                Apelido na Taverna
+              </Label>
+              <ControlledInput
+                hookForm={registerForm}
+                name="nickname"
+                placeholder="ex: Arthur Pendelton"
+                error={registerForm.formState.errors.nickname?.message}
+              />
+            </InputGroup>
 
-            <Input
-              label="E-mail"
-              type="email"
-              placeholder="seu@email.com"
-              error={registerForm.formState.errors.email?.message}
-              {...registerForm.register("email")}
-            />
+            <InputGroup>
+              <Label htmlFor="email" isRequired>
+                E-mail
+              </Label>
+              <ControlledInput
+                hookForm={registerForm}
+                name="email"
+                type="email"
+                placeholder="seu@email.com"
+                error={registerForm.formState.errors.email?.message}
+                sanitizeEmail
+                removeSpaces
+              />
+            </InputGroup>
 
-            <Input
-              label="Data de Nascimento"
-              type="date"
-              error={registerForm.formState.errors.birthDate?.message}
-              {...registerForm.register("birthDate")}
-            />
+            <InputGroup>
+              <Label htmlFor="birthDate" isRequired>
+                Data de Nascimento
+              </Label>
+              <DateInput
+                hookForm={registerForm}
+                name="birthDate"
+                placeholder="DD/MM/AAAA"
+                error={registerForm.formState.errors.birthDate?.message}
+                maxDate={new Date()}
+              />
+            </InputGroup>
 
-            <Input
-              label="Senha"
-              type="password"
-              placeholder="Mínimo 6 caracteres"
-              error={registerForm.formState.errors.password?.message}
-              {...registerForm.register("password")}
-            />
+            <InputGroup>
+              <Label htmlFor="password" isRequired>
+                Senha
+              </Label>
+              <PasswordInput
+                hookForm={registerForm}
+                name="password"
+                placeholder="Digite a senha"
+                error={registerForm.formState.errors.password?.message}
+              />
+              <PasswordRequirements value={passwordValue} />
+            </InputGroup>
+
+            <InputGroup>
+              <Label htmlFor="confirmPassword" isRequired>
+                Confirmar Senha
+              </Label>
+              <PasswordInput
+                hookForm={registerForm}
+                name="confirmPassword"
+                placeholder="Confirme a senha"
+                error={registerForm.formState.errors.confirmPassword?.message}
+              />
+            </InputGroup>
 
             <Button
               type="submit"

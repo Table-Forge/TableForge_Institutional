@@ -41,7 +41,7 @@ export const AuthService = {
           };
         }
       } catch {
-        // Fallback para mock se o backend estiver inacessível localmente
+        // Fallback
       }
     }
 
@@ -60,6 +60,14 @@ export const AuthService = {
   },
 
   register: async (data: IRegisterForm): Promise<IAuthResult> => {
+    const payload = {
+      username: data.username,
+      nickname: data.nickname,
+      email: data.email,
+      birthDate: data.birthDate,
+      password: data.password,
+    };
+
     if (API_BASE_URL) {
       try {
         const response = await fetch(`${API_BASE_URL}/users/register`, {
@@ -68,7 +76,7 @@ export const AuthService = {
             "Content-Type": "application/json",
             Accept: "application/json",
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(payload),
         });
 
         if (response.ok) {
@@ -78,7 +86,7 @@ export const AuthService = {
           });
         }
       } catch {
-        // Fallback para mock
+        // Fallback
       }
     }
 
