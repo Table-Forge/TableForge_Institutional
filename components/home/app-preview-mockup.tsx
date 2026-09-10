@@ -69,13 +69,13 @@ export function AppPreviewMockup() {
         })}
       </div>
 
-      <div className="relative w-full rounded-[2.5rem] p-2.5 bg-gradient-to-b from-[#3a3a3a] via-[#1E1E1E] to-[#0A0A0A] border-2 border-[#ff2400]/40 shadow-2xl shadow-[#ff2400]/20">
-        <div className="absolute top-5 left-1/2 -translate-x-1/2 w-24 h-4 bg-[#0A0A0A] rounded-full z-20 border border-[#2D2D2D]/60 flex items-center justify-center">
+      <div className="relative w-full rounded-[2.5rem] p-3.5 bg-black border-2 border-[#ff2400]/40">
+        <div className="absolute top-6 left-1/2 -translate-x-1/2 w-24 h-4 bg-black rounded-full z-20 border border-[#2D2D2D] flex items-center justify-center">
           <div className="w-2.5 h-2.5 rounded-full bg-[#1A1A1A] mr-2" />
           <div className="w-2 h-2 rounded-full bg-[#ff2400]/60" />
         </div>
 
-        <div className="relative w-full aspect-[450/915] rounded-[2rem] overflow-hidden bg-[#0A0A0A] border border-[#1E1E1E]">
+        <div className="relative w-full aspect-[450/915] rounded-[1.85rem] overflow-hidden bg-black border border-[#1E1E1E]">
           <Image
             src={activeScreen.src}
             alt={activeScreen.label}

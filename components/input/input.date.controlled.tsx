@@ -1,48 +1,92 @@
-import React, { useRef } from "react";
-import { type FieldValues, type Path, type PathValue, useController } from "react-hook-form";
-import { Calendar } from "lucide-react";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
+"use client";
+
 import { ErrorMessage } from "@/components/error-message/error-message";
 import type { IControlledDateInput } from "./input.interfaces";
 import { getInputClasses, inputInnerClasses } from "./input.styles";
-import { applyMask } from "./input.masked";
+import { MaskedInput } from "./input.masked";
+import { type FieldValues, type Path, type PathValue, useController } from "react-hook-form";
+import type { ReactNode } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { BiCalendar } from "react-icons/bi";
+import { ptBR } from "date-fns/locale";
+import { parseISO } from "date-fns";
 
-dayjs.extend(customParseFormat);
+const toTwoDigits = (value: number) => String(value).padStart(2, "0");
 
 const serializeDateOnly = (date: Date) => {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
+  const month = toTwoDigits(date.getMonth() + 1);
+  const day = toTwoDigits(date.getDate());
+
   return `${year}-${month}-${day}`;
 };
 
-const formatDateForDisplay = (value: unknown): string => {
-  if (!value || typeof value !== "string") return "";
-  const trimmed = value.trim();
-  if (/^\d{4}-\d{2}-\d{2}/.test(trimmed)) {
-    const [year, month, day] = trimmed.slice(0, 10).split("-");
-    return `${day}/${month}/${year}`;
-  }
-  return trimmed;
+const serializeDateTime = (date: Date) => {
+  return date.toISOString();
 };
+
+const parseDateValue = (value: unknown): Date | null => {
+  if (value === null || value === undefined || value === "") return null;
+
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? null : value;
+  }
+
+  if (
+    typeof value === "object" &&
+    value !== null &&
+    "toDate" in value &&
+    typeof (value as { toDate: () => unknown }).toDate === "function"
+  ) {
+    const parsed = (value as { toDate: () => unknown }).toDate();
+    return parsed instanceof Date && !Number.isNaN(parsed.getTime())
+      ? parsed
+      : null;
+  }
+
+  if (typeof value !== "string") return null;
+
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    const [year, month, day] = trimmed.split("-").map(Number);
+    return new Date(year, month - 1, day, 12, 0, 0);
+  }
+
+  const parsed = new Date(trimmed);
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed;
+  }
+
+  const dateFnsParsed = parseISO(trimmed);
+  return Number.isNaN(dateFnsParsed.getTime()) ? null : dateFnsParsed;
+};
+
+const parseDateValueOrUndefined = (value: unknown): Date | undefined =>
+  parseDateValue(value) ?? undefined;
 
 export function DateInput<TFieldValues extends FieldValues = FieldValues>({
   hookForm,
   name,
-  placeholder = "DD/MM/AAAA",
+  placeholder,
   disabled,
   isLoading,
   minDate,
   maxDate,
   className,
+  showYearDropdown = false,
   defaultValue,
+  selectsStart,
+  selectsEnd,
+  startDate,
+  endDate,
+  showTime = false,
   error: externalError,
 }: IControlledDateInput<TFieldValues>) {
-  const datePickerRef = useRef<HTMLInputElement>(null);
-
   const {
-    field: { value, onChange, onBlur, ref },
+    field: { value, onChange },
     fieldState: { error },
   } = useController({
     name,
@@ -54,37 +98,24 @@ export function DateInput<TFieldValues extends FieldValues = FieldValues>({
   });
 
   const errorMessage = externalError || error?.message;
-  const displayValue = formatDateForDisplay(value);
+  const dateFormat = showTime ? "dd/MM/yyyy HH:mm" : "dd/MM/yyyy";
+  const mask = showTime ? "99/99/9999 99:99" : "99/99/9999";
+  const placeholderText =
+    placeholder || (showTime ? "DD/MM/AAAA HH:mm" : "DD/MM/AAAA");
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const masked = applyMask(e.target.value, "99/99/9999");
-    const digits = masked.replace(/\D/g, "");
-
-    if (digits.length === 8) {
-      const parsed = dayjs(masked, "DD/MM/YYYY", true);
-      if (parsed.isValid()) {
-        onChange(parsed.format("YYYY-MM-DD"));
-        return;
-      }
-    }
-
-    if (digits.length === 0) {
-      onChange("");
+  const onChangeDate = (date: Date | null) => {
+    if (!date) {
+      onChange(null);
       return;
     }
 
-    onChange(masked);
-  };
-
-  const handleNativeDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const nativeVal = e.target.value;
-    if (nativeVal) {
-      onChange(nativeVal);
+    if (showTime) {
+      onChange(serializeDateTime(date));
+      return;
     }
-  };
 
-  const minDateStr = minDate instanceof Date ? serializeDateOnly(minDate) : (minDate ?? "");
-  const maxDateStr = maxDate instanceof Date ? serializeDateOnly(maxDate) : (maxDate ?? "");
+    onChange(serializeDateOnly(date));
+  };
 
   return (
     <div className={`flex w-full flex-col gap-1 ${className ?? ""}`}>
@@ -92,48 +123,48 @@ export function DateInput<TFieldValues extends FieldValues = FieldValues>({
         {isLoading ? (
           <div className="px-3 text-xs text-[#A1A1A1]">Carregando...</div>
         ) : (
-          <div className="relative flex h-full w-full items-center">
-            <input
-              ref={ref}
-              id={String(name)}
-              type="text"
-              placeholder={placeholder}
-              value={displayValue}
-              onChange={handleInputChange}
-              onBlur={onBlur}
-              disabled={disabled}
-              className={`${inputInnerClasses} pr-11`}
-            />
-
-            <input
-              ref={datePickerRef}
-              type="date"
-              tabIndex={-1}
-              aria-hidden="true"
-              min={minDateStr}
-              max={maxDateStr}
-              value={typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : ""}
-              onChange={handleNativeDateChange}
-              className="sr-only"
-            />
-
-            <button
-              type="button"
+          <div className="relative flex h-full w-full items-center" data-portal="true">
+            <DatePicker
+              selected={parseDateValue(value)}
+              onChange={(date: Date | null) => onChangeDate(date)}
               disabled={disabled || isLoading}
-              onClick={() => {
-                if (datePickerRef.current) {
-                  if ("showPicker" in HTMLInputElement.prototype) {
-                    datePickerRef.current.showPicker();
-                  } else {
-                    datePickerRef.current.focus();
-                  }
-                }
-              }}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#A1A1A1] hover:text-[#ff2400] transition-colors p-1"
-              aria-label="Selecionar data no calendário"
-            >
-              <Calendar size={18} />
-            </button>
+              dateFormat={dateFormat}
+              placeholderText={placeholderText}
+              showTimeSelect={showTime}
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              timeCaption="Hora"
+              locale={ptBR}
+              showYearDropdown={showYearDropdown}
+              minDate={parseDateValueOrUndefined(minDate)}
+              maxDate={parseDateValueOrUndefined(maxDate)}
+              selectsStart={selectsStart}
+              selectsEnd={selectsEnd}
+              startDate={parseDateValueOrUndefined(startDate)}
+              endDate={parseDateValueOrUndefined(endDate)}
+              todayButton="Data atual"
+              portalId="root-portal"
+              popperClassName="tf-datepicker-popper"
+              calendarClassName="tf-datepicker-calendar"
+              wrapperClassName="tf-datepicker-wrapper"
+              calendarContainer={(props: { children?: ReactNode }) => (
+                <div data-portal="true" className="tf-datepicker-calendar-container">
+                  {props.children}
+                </div>
+              )}
+              customInput={
+                <MaskedInput
+                  name={String(name)}
+                  mask={mask}
+                  data-portal="true"
+                  style={{ border: "none" }}
+                  className={`${inputInnerClasses} pr-11`}
+                />
+              }
+            />
+            <div className="pointer-events-none absolute right-3 text-white">
+              <BiCalendar size={20} />
+            </div>
           </div>
         )}
       </div>

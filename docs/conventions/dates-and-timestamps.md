@@ -7,7 +7,7 @@ The API distinguishes **three** date types and each one has its own rule:
 ---
 
 ## Reference implementations
-- [components/input/input.date.controlled.tsx](../../components/input/input.date.controlled.tsx) — `DateInput`: handles masked input `DD/MM/AAAA` and emits `YYYY-MM-DD`.
+- [components/input/input.date.controlled.tsx](../../components/input/input.date.controlled.tsx) — `DateInput`: built with `react-datepicker`, `date-fns` (locale `ptBR`), `MaskedInput`, and custom styling via `.tf-datepicker-*` with `#root-portal`. Emits `YYYY-MM-DD` (DateOnly) or ISO UTC string (when `showTime`).
 - [utils/custom-schema-validations.ts](../../utils/custom-schema-validations.ts) — `dateRequired`, `dateOnlyOptional`, and `dateOptional`.
 
 ---

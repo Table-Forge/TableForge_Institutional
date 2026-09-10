@@ -49,6 +49,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
           <AuthModal />
+          <div id="root-portal" />
         </AuthProvider>
       </body>
     </html>

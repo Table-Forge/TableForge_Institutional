@@ -30,6 +30,8 @@ export interface IControlledDateInput<TFieldValues extends FieldValues = FieldVa
   showTime?: boolean;
   startDate?: string | Date;
   endDate?: string | Date;
+  selectsStart?: boolean;
+  selectsEnd?: boolean;
 }
 
 export interface IMaskedInput extends React.InputHTMLAttributes<HTMLInputElement> {

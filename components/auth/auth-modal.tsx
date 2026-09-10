@@ -225,6 +225,7 @@ export function AuthModal() {
                 name="birthDate"
                 placeholder="DD/MM/AAAA"
                 error={registerForm.formState.errors.birthDate?.message}
+                showYearDropdown
                 maxDate={new Date()}
               />
             </InputGroup>
