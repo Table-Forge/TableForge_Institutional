@@ -54,3 +54,4 @@ Community recognition badges follow specific thematic color accents:
 3. **Consistency**: Use the designated token colors across all pages. Do not introduce arbitrary unaligned color palettes.
 4. **Responsive design**: Use Tailwind's default breakpoints (`sm:`, `md:`, `lg:`, `xl:`).
 5. **No CSS-in-JS**: Do not install or import `styled-components` or `@emotion/styled`.
+6. **Button styling**: Buttons follow sleek, compact proportions with `rounded-lg` (and `rounded-md` for xs/sm, `rounded-xl` for xl), natural-case typography (`font-medium` / `font-semibold text-sm`), and scaled heights (`h-7` to `h-12`). They avoid bulky pill shapes (`rounded-2xl`) and forced uppercase, maintaining a clean, modern aesthetic.

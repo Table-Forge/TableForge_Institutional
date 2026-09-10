@@ -30,20 +30,20 @@ export const Button: React.FC<IButton> = ({
     "primary";
 
   const baseStyles =
-    "inline-flex items-center justify-center gap-2 rounded-2xl border text-xs font-bold uppercase tracking-wider transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-60";
+    "inline-flex items-center justify-center gap-2 border font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-60";
 
   const widthStyles = maxWidth || className.includes("w-full") ? "w-full" : "w-max";
   const sizeStyles: Record<NonNullable<IButton["size"]>, string> = {
-    xs: "h-8 px-3",
-    sm: "h-10 px-4",
-    md: "h-12 px-5",
-    lg: "h-14 px-6",
-    xl: "h-16 px-7",
+    xs: "h-7 px-2.5 text-xs rounded-md",
+    sm: "h-8 px-3 text-xs rounded-md",
+    md: "h-10 px-4 text-sm rounded-lg",
+    lg: "h-11 px-5 text-sm font-semibold rounded-lg",
+    xl: "h-12 px-6 text-base font-semibold rounded-xl",
   };
 
   const variants: Record<ButtonStyles, string> = {
     primary: "bg-[#ff2400] border-[#ff2400] text-white hover:brightness-110",
-    secondary: "bg-[#ff2400] border-[#ff2400] text-white hover:brightness-110",
+    secondary: "bg-[#3a3a3a] border-[#4A4A4A] text-white hover:bg-[#4A4A4A]",
     danger: "bg-red-600 border-red-600 text-white hover:brightness-110",
     hollow:
       "bg-transparent border-[#ff2400] text-[#ff2400] hover:bg-[#ff2400]/10",
