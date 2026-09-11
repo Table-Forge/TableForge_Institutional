@@ -24,18 +24,10 @@ const getEnvironment = (): TEnvironment => {
 const environment = getEnvironment();
 
 const getApiUrl = () => {
-  const sharedUrl = (process.env.NEXT_PUBLIC_API_URL ??
-    process.env.VITE_API_URL) as string | undefined;
-  const devUrl = (process.env.NEXT_PUBLIC_API_DEVELOPMENT_URL ??
-    process.env.VITE_API_DEVELOPMENT_URL) as string | undefined;
-  const prodUrl = (process.env.NEXT_PUBLIC_API_PRODUCTION_URL ??
-    process.env.VITE_API_PRODUCTION_URL) as string | undefined;
-
-  if (environment === "prod") {
-    return sharedUrl ?? prodUrl ?? devUrl ?? "";
-  }
-
-  return sharedUrl ?? devUrl ?? prodUrl ?? "";
+  return (
+    (process.env.NEXT_PUBLIC_API_URL ??
+      process.env.VITE_API_URL) as string | undefined
+  ) ?? "";
 };
 
 export const ENV = {
