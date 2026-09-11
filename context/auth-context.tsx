@@ -54,7 +54,12 @@ export function useAuth() {
     await AuthService.logout(refreshToken);
     signOutStore();
     if (typeof window !== "undefined") {
-      window.location.href = "/";
+      const isProfilePage =
+        window.location.pathname === "/perfil" ||
+        window.location.pathname.startsWith("/perfil/");
+      if (isProfilePage) {
+        window.location.href = "/";
+      }
     }
   };
 
