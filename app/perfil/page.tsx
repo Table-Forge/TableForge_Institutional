@@ -154,6 +154,7 @@ export default function PerfilPage() {
                   src={avatarSource}
                   alt={displayName}
                   fill
+                  sizes="96px"
                   unoptimized
                   onError={() => setFailedAvatarUrl(avatarSource)}
                   className="rounded-full object-cover"

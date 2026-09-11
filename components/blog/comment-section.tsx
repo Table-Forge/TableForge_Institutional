@@ -126,6 +126,7 @@ export function CommentSection({ postId, initialComments }: ICommentSection) {
                       src={comment.authorAvatarUrl}
                       alt={comment.authorName}
                       fill
+                      sizes="28px"
                       className="object-cover"
                     />
                   </div>

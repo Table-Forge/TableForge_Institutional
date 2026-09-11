@@ -17,6 +17,7 @@ export function Logo({ variant = "horizontal", className = "", priority = false 
             src={BRAND_LOGOS.local.markDark}
             alt="TableForge Mark"
             fill
+            sizes="(max-width: 640px) 44px, 56px"
             priority={priority}
             className="object-contain"
           />
@@ -26,6 +27,7 @@ export function Logo({ variant = "horizontal", className = "", priority = false 
             src={BRAND_LOGOS.local.textDark}
             alt="TableForge"
             fill
+            sizes="(max-width: 640px) 112px, 144px"
             priority={priority}
             className="object-contain"
           />

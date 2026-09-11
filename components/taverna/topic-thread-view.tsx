@@ -125,6 +125,7 @@ export function TopicThreadView({ topic, initialReplies }: ITopicThreadView) {
                 src={topic.author.avatarUrl}
                 alt={topic.author.nickname}
                 fill
+                sizes="36px"
                 className="object-cover"
               />
             </div>

@@ -151,6 +151,7 @@ export function EditProfileModal({
                   src={avatarSource}
                   alt={user.nickname || user.username}
                   fill
+                  sizes="96px"
                   unoptimized
                   className="rounded-full object-cover"
                 />

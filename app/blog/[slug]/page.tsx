@@ -103,6 +103,7 @@ export default async function BlogPostPage({ params }: IBlogPostPageProps) {
                   src={post.authorAvatarUrl}
                   alt={post.authorName}
                   fill
+                  sizes="36px"
                   className="object-cover"
                 />
               </div>
@@ -126,6 +127,7 @@ export default async function BlogPostPage({ params }: IBlogPostPageProps) {
             src={post.coverImageUrl}
             alt={post.title}
             fill
+            sizes="(max-width: 896px) 100vw, 896px"
             priority
             className="object-cover"
           />

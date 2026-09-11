@@ -77,6 +77,7 @@ export function Header() {
                         src={avatarSource}
                         alt={displayName}
                         fill
+                        sizes="36px"
                         unoptimized
                         onError={() => setFailedAvatarUrl(avatarSource)}
                         className="object-cover rounded-full"
@@ -171,6 +172,7 @@ export function Header() {
                           src={avatarSource}
                           alt={displayName}
                           fill
+                          sizes="36px"
                           unoptimized
                           onError={() => setFailedAvatarUrl(avatarSource)}
                           className="object-cover rounded-full"

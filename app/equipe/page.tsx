@@ -38,6 +38,7 @@ export default function EquipePage() {
                 src={member.avatarUrl}
                 alt={member.name}
                 fill
+                sizes="(max-width: 640px) 96px, 112px"
                 className="object-cover rounded-full"
               />
             </div>

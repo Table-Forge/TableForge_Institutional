@@ -24,6 +24,7 @@ export function TopicRow({ topic, showCategory = true }: ITopicRow) {
             src={topic.author.avatarUrl}
             alt={topic.author.nickname}
             fill
+            sizes="40px"
             className="object-cover"
           />
         </div>

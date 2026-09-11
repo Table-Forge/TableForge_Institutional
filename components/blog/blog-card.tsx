@@ -28,6 +28,7 @@ export function BlogCard({ post, featured = false }: IBlogCard) {
             src={post.coverImageUrl}
             alt={post.title}
             fill
+            sizes="(max-width: 1024px) 100vw, 58vw"
             className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
         </div>
@@ -55,6 +56,7 @@ export function BlogCard({ post, featured = false }: IBlogCard) {
                   src={post.authorAvatarUrl}
                   alt={post.authorName}
                   fill
+                  sizes="24px"
                   className="object-cover"
                 />
               </div>
@@ -80,6 +82,7 @@ export function BlogCard({ post, featured = false }: IBlogCard) {
           src={post.coverImageUrl}
           alt={post.title}
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 384px"
           className="object-cover group-hover:scale-105 transition-transform duration-500"
         />
         <div className="absolute top-3 left-3">
@@ -113,6 +116,7 @@ export function BlogCard({ post, featured = false }: IBlogCard) {
               src={post.authorAvatarUrl}
               alt={post.authorName}
               fill
+              sizes="20px"
               className="object-cover"
             />
           </div>

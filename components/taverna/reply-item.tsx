@@ -41,6 +41,7 @@ export function ReplyItem({ reply }: IReplyItem) {
               src={reply.author.avatarUrl}
               alt={reply.author.nickname}
               fill
+              sizes="32px"
               className="object-cover"
             />
           </div>
