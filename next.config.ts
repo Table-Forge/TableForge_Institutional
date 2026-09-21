@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "tableforge-bucket.s3.amazonaws.com",
+        hostname: "table-forge.s3.amazonaws.com",
       },
     ],
   },
