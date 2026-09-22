@@ -92,7 +92,7 @@ export default async function BlogPostPage({ params }: IBlogPostPageProps) {
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[#faf3e0] tracking-tight leading-[1.2]">
+          <h1 className="font-display text-2xl font-bold uppercase leading-[1.15] tracking-[0.02em] text-[#faf3e0] sm:text-4xl lg:text-5xl">
             {post.title}
           </h1>
 
@@ -122,7 +122,7 @@ export default async function BlogPostPage({ params }: IBlogPostPageProps) {
           </div>
         </div>
 
-        <div className="relative h-72 sm:h-96 lg:h-[450px] w-full rounded-xl overflow-hidden bg-[#2D2D2D]">
+        <div className="relative h-72 w-full chamfer-lg overflow-hidden bg-[#2D2D2D] sm:h-96 lg:h-[450px]">
           <Image
             src={post.coverImageUrl}
             alt={post.title}
@@ -133,7 +133,7 @@ export default async function BlogPostPage({ params }: IBlogPostPageProps) {
           />
         </div>
 
-        <div className="prose prose-invert max-w-none text-[#D1D1D1] leading-relaxed space-y-6 text-sm sm:text-base whitespace-pre-line">
+        <div className="prose prose-invert max-w-none space-y-6 whitespace-pre-line text-sm leading-relaxed text-[#D1D1D1] first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:font-display first-letter:text-5xl first-letter:font-bold first-letter:leading-[0.8] first-letter:text-[#ff5a36] sm:text-base">
           {post.content}
         </div>
 

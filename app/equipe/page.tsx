@@ -2,12 +2,14 @@ import React from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
+import { Dice6 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { initialTeamMembers } from "@/data/team.mock";
-import { Users, Dice6, Flame } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { ForgeBand } from "@/components/ui/forge-band";
+import { AnvilSpot } from "@/components/ui/spot-art";
 import { GithubIcon, LinkedinIcon, TwitterIcon } from "@/components/ui/icons";
+import { initialTeamMembers } from "@/data/team.mock";
 
 export const metadata: Metadata = {
   title: "Equipe | Quem Forja o TableForge",
@@ -16,106 +18,113 @@ export const metadata: Metadata = {
 
 export default function EquipePage() {
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 space-y-16">
-      <div className="text-center space-y-4 max-w-2xl mx-auto">
-        <Badge variant="primary" className="mx-auto">
-          <Users className="w-3.5 h-3.5" />
-          <span>Ferreiros da Mesa</span>
-        </Badge>
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#faf3e0] tracking-tight">
-          Quem Forja o TableForge
-        </h1>
-        <p className="text-sm sm:text-base text-[#A1A1A1] leading-relaxed">
-          Somos narradores, jogadores de tabuleiro e engenheiros de software unidos para criar o produto que sempre sonhamos ter nas nossas sextas-feiras à noite.
-        </p>
-      </div>
+    <div className="pb-20">
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
+        <SectionHeading
+          level="h1"
+          size="lg"
+          align="center"
+          kicker="Ferreiros da mesa"
+          title="Quem forja o TableForge"
+          description="Somos narradores, jogadores de tabuleiro e engenheiros de software unidos para criar o produto que sempre sonhamos ter nas nossas sextas-feiras à noite."
+        />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-        {initialTeamMembers.map((member) => (
-          <Card key={member.id} variant="surface" className="flex flex-col sm:flex-row gap-6 items-start">
-            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-[#1E1E1E] shrink-0 border border-[#3a3a3a]">
-              <Image
-                src={member.avatarUrl}
-                alt={member.name}
-                fill
-                sizes="(max-width: 640px) 96px, 112px"
-                className="object-cover rounded-full"
-              />
-            </div>
-
-            <div className="space-y-3 flex-1 min-w-0">
-              <div>
-                <h3 className="text-lg font-bold text-[#faf3e0]">{member.name}</h3>
-                <p className="text-xs font-semibold text-[#ff2400]">{member.role}</p>
+        <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
+          {initialTeamMembers.map((member) => (
+            <Card
+              key={member.id}
+              variant="surface"
+              className="flex flex-col items-center gap-6 text-center sm:flex-row sm:items-start sm:text-left"
+            >
+              <div className="relative shrink-0 pb-3">
+                <div className="h-28 w-28 rounded-full p-1 ring-4 ring-[#3a3a3a] ring-offset-4 ring-offset-[#18181c]">
+                  <div className="relative h-full w-full overflow-hidden rounded-full border-2 border-[#0b0b0d] bg-[#1E1E1E]">
+                    <Image
+                      src={member.avatarUrl}
+                      alt={member.name}
+                      fill
+                      sizes="112px"
+                      className="rounded-full object-cover"
+                    />
+                  </div>
+                </div>
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap chamfer-sm bg-[#ff2400] px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
+                  Ferreiro
+                </span>
               </div>
 
-              <p className="text-xs text-[#A1A1A1] leading-relaxed">
-                {member.bio}
-              </p>
+              <div className="min-w-0 flex-1 space-y-3">
+                <div>
+                  <h3 className="font-display text-lg font-bold uppercase tracking-[0.03em] text-[#faf3e0]">{member.name}</h3>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#ff5a36]">{member.role}</p>
+                </div>
 
-              <div className="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-[#3a3a3a] text-xs">
-                <span className="text-[#717171] flex items-center gap-1">
-                  <Dice6 className="w-3.5 h-3.5 text-[#ff2400]" />
-                  Jogo favorito: <strong className="text-[#D1D1D1]">{member.favoriteSystemOrGame}</strong>
-                </span>
+                <p className="text-xs leading-relaxed text-[#A1A1A1]">{member.bio}</p>
 
-                <div className="flex items-center gap-2 text-[#A1A1A1]">
-                  {member.githubUrl && (
-                    <a
-                      href={member.githubUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="hover:text-[#faf3e0] transition-colors"
-                      aria-label="GitHub"
-                    >
-                      <GithubIcon className="w-4 h-4" />
-                    </a>
-                  )}
-                  {member.linkedinUrl && (
-                    <a
-                      href={member.linkedinUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="hover:text-[#faf3e0] transition-colors"
-                      aria-label="LinkedIn"
-                    >
-                      <LinkedinIcon className="w-4 h-4" />
-                    </a>
-                  )}
-                  {member.twitterUrl && (
-                    <a
-                      href={member.twitterUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="hover:text-[#faf3e0] transition-colors"
-                      aria-label="Twitter / X"
-                    >
-                      <TwitterIcon className="w-4 h-4" />
-                    </a>
-                  )}
+                <div className="flex flex-wrap items-center justify-center gap-2 border-t border-[#3a3a3a] pt-3 text-xs sm:justify-between">
+                  <span className="flex items-center gap-1 text-[#717171]">
+                    <Dice6 className="h-3.5 w-3.5 text-[#ff2400]" />
+                    Jogo favorito: <strong className="text-[#D1D1D1]">{member.favoriteSystemOrGame}</strong>
+                  </span>
+
+                  <div className="flex items-center gap-2 text-[#A1A1A1]">
+                    {member.githubUrl && (
+                      <a
+                        href={member.githubUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="transition-colors hover:text-[#faf3e0]"
+                        aria-label="GitHub"
+                      >
+                        <GithubIcon className="h-4 w-4" />
+                      </a>
+                    )}
+                    {member.linkedinUrl && (
+                      <a
+                        href={member.linkedinUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="transition-colors hover:text-[#faf3e0]"
+                        aria-label="LinkedIn"
+                      >
+                        <LinkedinIcon className="h-4 w-4" />
+                      </a>
+                    )}
+                    {member.twitterUrl && (
+                      <a
+                        href={member.twitterUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="transition-colors hover:text-[#faf3e0]"
+                        aria-label="Twitter / X"
+                      >
+                        <TwitterIcon className="h-4 w-4" />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </Card>
-        ))}
+            </Card>
+          ))}
+        </div>
       </div>
 
-      <div className="bg-[#1E1E1E] border border-[#2D2D2D] rounded-2xl p-8 text-center space-y-4">
-        <Flame className="w-8 h-8 text-[#ff2400] mx-auto fill-[#ff2400]/20" />
-        <h3 className="text-xl font-bold text-[#faf3e0]">
-          Construindo em Público com a Comunidade
-        </h3>
-        <p className="text-xs sm:text-sm text-[#A1A1A1] max-w-xl mx-auto leading-relaxed">
-          Acreditamos em transparência radical. Cada funcionalidade da Beta é discutida e testada diretamente com os usuários no fórum da Forja.
-        </p>
-        <div className="pt-2">
+      <ForgeBand>
+        <div className="flex flex-col items-center gap-6 text-center">
+          <AnvilSpot className="h-24 w-24" />
+          <SectionHeading
+            align="center"
+            kicker="Transparência radical"
+            title="Construindo em público com a comunidade"
+            description="Cada funcionalidade da Beta é discutida e testada diretamente com os usuários no fórum da Forja."
+          />
           <Link href="/taverna/table-forge">
             <Button variant="primary" size="md">
-              Acompanhar Atualizações d&apos;A Forja
+              Acompanhar atualizações d&apos;A Forja
             </Button>
           </Link>
         </div>
-      </div>
+      </ForgeBand>
     </div>
   );
 }

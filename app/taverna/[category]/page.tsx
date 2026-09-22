@@ -60,7 +60,7 @@ export default function TavernaCategoryPage() {
               <Badge variant="primary">{category.name}</Badge>
               <span className="text-xs text-[#717171]">{categoryTopics.length} discussões</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black text-[#faf3e0] tracking-tight">
+            <h1 className="font-display text-3xl font-bold uppercase tracking-[0.02em] text-[#faf3e0] sm:text-4xl">
               {category.name}
             </h1>
             <p className="text-sm text-[#A1A1A1] leading-relaxed">
@@ -91,7 +91,7 @@ export default function TavernaCategoryPage() {
           <span className="text-[#717171] font-medium mr-1">Ordenar por:</span>
           <button
             onClick={() => setSortBy("recent")}
-            className={`px-3 py-1.5 rounded-lg font-medium transition-colors ${
+            className={`chamfer-sm px-3 py-1.5 font-semibold uppercase tracking-[0.15em] transition-colors ${
               sortBy === "recent"
                 ? "bg-[#ff2400] text-[#faf3e0]"
                 : "bg-[#1E1E1E] text-[#A1A1A1] hover:text-[#faf3e0]"
@@ -101,7 +101,7 @@ export default function TavernaCategoryPage() {
           </button>
           <button
             onClick={() => setSortBy("replies")}
-            className={`px-3 py-1.5 rounded-lg font-medium transition-colors ${
+            className={`chamfer-sm px-3 py-1.5 font-semibold uppercase tracking-[0.15em] transition-colors ${
               sortBy === "replies"
                 ? "bg-[#ff2400] text-[#faf3e0]"
                 : "bg-[#1E1E1E] text-[#A1A1A1] hover:text-[#faf3e0]"
@@ -111,7 +111,7 @@ export default function TavernaCategoryPage() {
           </button>
           <button
             onClick={() => setSortBy("upvotes")}
-            className={`px-3 py-1.5 rounded-lg font-medium transition-colors ${
+            className={`chamfer-sm px-3 py-1.5 font-semibold uppercase tracking-[0.15em] transition-colors ${
               sortBy === "upvotes"
                 ? "bg-[#ff2400] text-[#faf3e0]"
                 : "bg-[#1E1E1E] text-[#A1A1A1] hover:text-[#faf3e0]"
@@ -123,7 +123,7 @@ export default function TavernaCategoryPage() {
       </div>
 
       {categoryTopics.length === 0 ? (
-        <div className="text-center py-16 bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl space-y-3">
+        <div className="space-y-3 chamfer-md bg-[#121214] py-16 text-center ring-1 ring-inset ring-[#2a2a30]">
           <Sparkles className="w-8 h-8 text-[#A1A1A1] mx-auto" />
           <p className="text-base font-semibold text-[#faf3e0]">Nenhuma discussão nesta categoria ainda</p>
           <p className="text-xs text-[#A1A1A1] max-w-sm mx-auto">

@@ -63,7 +63,7 @@ export function CommentSection({ postId, initialComments }: ICommentSection) {
       </div>
 
       {!isAuthenticated ? (
-        <div className="bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl p-6 text-center space-y-3">
+        <div className="chamfer-md bg-[#121214] ring-1 ring-inset ring-[#2a2a30] p-6 text-center space-y-3">
           <p className="text-sm font-semibold text-[#faf3e0]">
             Faça login para comentar neste artigo
           </p>
@@ -76,7 +76,7 @@ export function CommentSection({ postId, initialComments }: ICommentSection) {
           </Button>
         </div>
       ) : (
-        <div className="bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl p-6 space-y-4">
+        <div className="chamfer-md bg-[#121214] ring-1 ring-inset ring-[#2a2a30] p-6 space-y-4">
           <div className="flex items-center justify-between pb-2 border-b border-[#2D2D2D]">
             <h4 className="text-sm font-semibold text-[#faf3e0]">Deixe seu comentário</h4>
             <span className="text-xs text-[#A1A1A1]">
@@ -117,7 +117,7 @@ export function CommentSection({ postId, initialComments }: ICommentSection) {
           return (
             <div
               key={comment.id}
-              className="bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl p-5 space-y-2"
+              className="chamfer-md bg-[#121214] ring-1 ring-inset ring-[#2a2a30] p-5 space-y-2"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">

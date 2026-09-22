@@ -114,7 +114,7 @@ export function TopicThreadView({ topic, initialReplies }: ITopicThreadView) {
           </Link>
         </div>
 
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#faf3e0] tracking-tight leading-[1.2]">
+        <h1 className="text-2xl font-black leading-[1.2] tracking-tight text-[#faf3e0] sm:text-3xl lg:text-4xl">
           {topic.title}
         </h1>
 
@@ -146,7 +146,7 @@ export function TopicThreadView({ topic, initialReplies }: ITopicThreadView) {
         </div>
       </div>
 
-      <div className="bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl p-6 lg:p-8 space-y-6">
+      <div className="space-y-6 chamfer-md bg-[#121214] p-6 ring-1 ring-inset ring-[#2a2a30] lg:p-8">
         <div className="text-sm sm:text-base text-[#D1D1D1] leading-relaxed whitespace-pre-line">
           {topic.content}
         </div>
@@ -154,7 +154,7 @@ export function TopicThreadView({ topic, initialReplies }: ITopicThreadView) {
         <div className="pt-4 border-t border-[#2D2D2D] flex items-center justify-between">
           <button
             onClick={handleToggleTopicVote}
-            className={`inline-flex items-center gap-2 text-xs px-3.5 py-1.5 rounded-lg transition-colors ${
+            className={`inline-flex items-center gap-2 chamfer-sm px-3.5 py-1.5 text-xs transition-colors ${
               hasVotedTopic
                 ? "bg-[#ff2400]/20 text-[#ff2400] font-semibold"
                 : "bg-[#2D2D2D] text-[#A1A1A1] hover:text-[#faf3e0]"
@@ -179,7 +179,7 @@ export function TopicThreadView({ topic, initialReplies }: ITopicThreadView) {
         </div>
 
         {replies.length === 0 ? (
-          <div className="text-center py-10 bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl">
+          <div className="chamfer-md bg-[#121214] py-10 text-center ring-1 ring-inset ring-[#2a2a30]">
             <p className="text-sm text-[#A1A1A1]">Nenhuma resposta ainda. Compartilhe sua perspectiva!</p>
           </div>
         ) : (
@@ -192,12 +192,12 @@ export function TopicThreadView({ topic, initialReplies }: ITopicThreadView) {
       </div>
 
       {topic.isLocked ? (
-        <div className="p-4 bg-[#2D2D2D] border border-[#3a3a3a] rounded-xl text-center text-xs text-[#A1A1A1]">
+        <div className="chamfer-md bg-[#2D2D2D] p-4 text-center text-xs text-[#A1A1A1] ring-1 ring-inset ring-[#3a3a3a]">
           Esta discussão foi trancada pela moderação. Não é possível enviar novas respostas.
         </div>
       ) : !isAuthenticated ? (
-        <div className="bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl p-8 text-center space-y-4">
-          <div className="w-12 h-12 rounded-full bg-[#ff2400]/15 border border-[#ff2400]/30 flex items-center justify-center text-[#ff2400] mx-auto">
+        <div className="space-y-4 chamfer-md bg-[#121214] p-8 text-center ring-1 ring-inset ring-[#2a2a30]">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center chamfer-sm bg-[#ff2400]/15 text-[#ff2400] ring-1 ring-inset ring-[#ff2400]/30">
             <LogIn className="w-6 h-6" />
           </div>
           <div className="space-y-1.5">
@@ -219,8 +219,8 @@ export function TopicThreadView({ topic, initialReplies }: ITopicThreadView) {
           </div>
         </div>
       ) : (
-        <div className="bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl p-6 space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-[#2D2D2D]">
+        <div className="space-y-4 chamfer-md bg-[#121214] p-6 ring-1 ring-inset ring-[#2a2a30]">
+          <div className="flex items-center justify-between border-b border-[#2D2D2D] pb-2">
             <h4 className="text-sm font-semibold text-[#faf3e0]">Sua Resposta</h4>
             <span className="text-xs text-[#A1A1A1]">
               Respondendo como <strong className="text-[#faf3e0]">{user?.nickname || user?.username}</strong>

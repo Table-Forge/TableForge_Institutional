@@ -82,7 +82,7 @@ export default function PerfilPage() {
   if (!isAuthenticated || !user) {
     return (
       <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-6">
-        <div className="w-16 h-16 rounded-xl bg-[#ff2400]/10 border border-[#ff2400]/30 flex items-center justify-center text-[#ff2400] mx-auto">
+        <div className="w-16 h-16 chamfer-sm bg-[#ff2400]/10 border border-[#ff2400]/30 flex items-center justify-center text-[#ff2400] mx-auto">
           <User className="w-8 h-8" />
         </div>
         <div className="space-y-2">
@@ -143,7 +143,7 @@ export default function PerfilPage() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-[#2D2D2D] bg-[#141414] p-6 sm:p-8 relative overflow-hidden shadow-2xl">
+      <div className="chamfer-md border border-[#2a2a30] bg-[#121214] p-6 sm:p-8 relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-80 h-80 bg-[#ff2400]/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 relative z-10">
@@ -197,7 +197,7 @@ export default function PerfilPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="rounded-xl border border-[#2D2D2D] bg-[#141414] p-6 space-y-5">
+        <div className="chamfer-md border border-[#2a2a30] bg-[#121214] p-6 space-y-5">
           <div className="flex items-center gap-2 border-b border-[#2D2D2D] pb-3">
             <User className="w-4 h-4 text-[#ff2400]" />
             <h2 className="text-sm font-bold uppercase tracking-wider text-[#faf3e0]">
@@ -244,7 +244,7 @@ export default function PerfilPage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-[#2D2D2D] bg-[#141414] p-6 space-y-5">
+        <div className="chamfer-md border border-[#2a2a30] bg-[#121214] p-6 space-y-5">
           <div className="flex items-center gap-2 border-b border-[#2D2D2D] pb-3">
             <Shield className="w-4 h-4 text-[#ff2400]" />
             <h2 className="text-sm font-bold uppercase tracking-wider text-[#faf3e0]">
@@ -301,7 +301,7 @@ export default function PerfilPage() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-[#2D2D2D] bg-[#141414] p-6 space-y-4">
+      <div className="chamfer-md border border-[#2a2a30] bg-[#121214] p-6 space-y-4">
         <h2 className="text-sm font-bold uppercase tracking-wider text-[#faf3e0]">
           Ações Rápidas
         </h2>

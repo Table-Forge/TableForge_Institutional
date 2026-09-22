@@ -50,7 +50,7 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm px-3 py-1.5 rounded-md font-medium transition-colors ${
+                className={`text-sm px-3 py-1.5 chamfer-sm font-medium transition-colors ${
                   isActive
                     ? "text-[#ff2400] bg-[#ff2400]/10"
                     : "text-[#D1D1D1] hover:text-[#faf3e0] hover:bg-[#1E1E1E]"
@@ -147,7 +147,7 @@ export function Header() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                className={`block px-3 py-2 chamfer-sm text-base font-medium ${
                   isActive
                     ? "text-[#ff2400] bg-[#ff2400]/15"
                     : "text-[#D1D1D1] hover:text-[#faf3e0] hover:bg-[#2D2D2D]"

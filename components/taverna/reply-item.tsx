@@ -33,7 +33,7 @@ export function ReplyItem({ reply }: IReplyItem) {
   };
 
   return (
-    <div className="bg-[#1E1E1E] border border-[#2D2D2D] rounded-xl p-5 lg:p-6 space-y-4">
+    <div className="space-y-4 border-l-2 border-[#2D2D2D] bg-[#0f0f12] p-5 lg:p-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="relative w-8 h-8 rounded-full overflow-hidden bg-[#2D2D2D] border border-[#3a3a3a]">

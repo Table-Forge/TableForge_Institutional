@@ -1,102 +1,86 @@
 import React from "react";
 import Image from "next/image";
-import { Sparkles, Dices, Award, Palette } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { SectionHeading } from "@/components/ui/section-heading";
 
 interface IDiceFeature {
   title: string;
   description: string;
   imageSrc: string;
-  icon: React.ComponentType<{ className?: string }>;
   tag: string;
 }
 
 const DICE_FEATURES: IDiceFeature[] = [
   {
-    title: "Múltiplos Dados & Física Tátil",
+    title: "Múltiplos dados e física tátil",
     description:
       "Selecione e role qualquer combinação de dados ao mesmo tempo (d4, d6, d8, d10, d12, d20, d100) com controles ágeis.",
     imageSrc: "/app-screens/dice-roll.png",
-    icon: Dices,
-    tag: "Rolagem Rápida",
+    tag: "Rolagem rápida",
   },
   {
-    title: "Resultados com Bônus e Críticos",
+    title: "Resultados com bônus e críticos",
     description:
       "Soma automática de modificadores, histórico recente de rolagens e destaque visual para sucessos ou desastres decisivos.",
     imageSrc: "/app-screens/dice-result.png",
-    icon: Award,
-    tag: "Cálculo Instantâneo",
+    tag: "Cálculo instantâneo",
   },
   {
-    title: "Skins & Colecionáveis",
+    title: "Skins e colecionáveis",
     description:
       "Personalize a aparência dos seus dados no app com temas exclusivos: obsidiana rúnica, ouro forjado, âmbar e muito mais.",
     imageSrc: "/app-screens/dice-appearance.png",
-    icon: Palette,
     tag: "Customização",
   },
 ];
 
 export function DiceFeatureSection() {
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="relative overflow-hidden rounded-xl border border-[#ff2400]/40 bg-gradient-to-b from-[#1E1E1E] via-[#121212] to-[#0A0A0A] p-8 sm:p-12 lg:p-16 shadow-2xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#ff2400]/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+    <section className="mx-auto mt-20 max-w-7xl px-4 sm:px-6 lg:mt-28 lg:px-8">
+      <SectionHeading
+        numeral="III"
+        kicker="Forja de dados"
+        title="A forja de dados integrada"
+        description="Esqueceu seus dados em casa ou precisa de uma rolagem rápida no meio da campanha? O TableForge conta com um rolador completo nativo no app, com cálculo automático de modificadores e skins colecionáveis."
+      />
 
-        <div className="max-w-3xl mx-auto text-center space-y-4 mb-12 sm:mb-16 relative z-10">
-          <Badge variant="primary" className="mx-auto">
-            <Sparkles className="w-3.5 h-3.5 text-[#ff2400]" />
-            <span>Hidden Feature do Aplicativo</span>
-          </Badge>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#faf3e0] tracking-tight">
-            A Forja de Dados Integrada
-          </h2>
-          <p className="text-sm sm:text-base text-[#D1D1D1] leading-relaxed">
-            Esqueceu seus dados em casa ou precisa de uma rolagem rápida no meio da campanha? O TableForge conta com um rolador completo de dados nativo no app, com cálculo automático de modificadores e skins colecionáveis.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-          {DICE_FEATURES.map((feature) => {
-            const Icon = feature.icon;
-            return (
-              <div
-                key={feature.title}
-                className="group rounded-xl bg-[#171717] border border-[#2D2D2D] hover:border-[#ff2400]/50 transition-all duration-300 p-5 flex flex-col justify-between space-y-5"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="w-9 h-9 rounded-lg bg-[#ff2400]/15 flex items-center justify-center text-[#ff2400]">
-                      <Icon className="w-4 h-4" />
-                    </div>
-                    <span className="text-[11px] font-semibold text-[#ff2400] bg-[#ff2400]/10 px-2.5 py-0.5 rounded-full border border-[#ff2400]/20">
-                      {feature.tag}
-                    </span>
-                  </div>
-                  <h3 className="text-base font-bold text-[#faf3e0] group-hover:text-white transition-colors">
+      <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
+        {DICE_FEATURES.map((feature) => {
+          return (
+            <Card
+              key={feature.title}
+              variant="interactive"
+              className="flex flex-col gap-5"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="space-y-2">
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#ff5a36]">
+                    {feature.tag}
+                  </span>
+                  <h3 className="font-display text-base font-bold uppercase tracking-[0.05em] text-[#faf3e0]">
                     {feature.title}
                   </h3>
-                  <p className="text-xs text-[#A1A1A1] leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
-
-                <div className="w-full max-w-[248px] mx-auto p-2 rounded-xl bg-black border border-[#2D2D2D]">
-                  <div className="relative w-full aspect-[450/915] rounded-lg overflow-hidden">
-                    <Image
-                      src={feature.imageSrc}
-                      alt={feature.title}
-                      fill
-                      sizes="(max-width: 768px) 240px, 280px"
-                      className="object-cover object-top"
-                    />
-                  </div>
                 </div>
               </div>
-            );
-          })}
-        </div>
+
+              <p className="text-xs leading-relaxed text-[#A1A1A1]">
+                {feature.description}
+              </p>
+
+              <div className="mx-auto mt-auto w-full max-w-[248px] chamfer-md bg-[#0b0b0d] p-2 ring-1 ring-inset ring-[#2a2a30]">
+                <div className="relative aspect-[450/915] w-full overflow-hidden">
+                  <Image
+                    src={feature.imageSrc}
+                    alt={feature.title}
+                    fill
+                    sizes="(max-width: 768px) 240px, 280px"
+                    className="object-cover object-top"
+                  />
+                </div>
+              </div>
+            </Card>
+          );
+        })}
       </div>
     </section>
   );
