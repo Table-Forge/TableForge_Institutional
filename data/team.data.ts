@@ -40,7 +40,7 @@ export const teamMembers: ITeamMember[] = [
     area: "Qualidade",
     bio: "Veterano de mil campanhas e explorador incansável de regras. Vinicius traz seus anos de experiência para testar o TableForge até o limite e caçar bugs críticos como se fossem dragões. Com uma bagagem que cobre praticamente \"todos os boardgames da vida\", ele tem a visão exata do que os jogadores precisam para ter uma experiência impecável na plataforma.",
     avatarUrl: "https://table-forge.s3.amazonaws.com/development/public/images/65b3434c-581d-48e6-83f1-5092fe0ec902.webp?v=1",
-    favoriteSystemOrGame: "D&D e todos os boardgames da vida.",
+    favoriteSystemOrGame: "Card game, deck building e euro game",
     linkedinUrl: "https://www.linkedin.com/in/vinicius-galvão-dos-santos/",
   },
   {
