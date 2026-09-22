@@ -9,7 +9,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { ForgeBand } from "@/components/ui/forge-band";
 import { AnvilSpot } from "@/components/ui/spot-art";
 import { BehanceIcon, GithubIcon, LinkedinIcon, TwitterIcon } from "@/components/ui/icons";
-import { initialTeamMembers } from "@/data/team.mock";
+import { teamMembers } from "@/data/team.data";
 
 export const metadata: Metadata = {
   title: "Equipe | Quem Forja o TableForge",
@@ -30,7 +30,7 @@ export default function EquipePage() {
         />
 
         <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
-          {initialTeamMembers.map((member) => (
+          {teamMembers.map((member) => (
             <Card
               key={member.id}
               variant="surface"

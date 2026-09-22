@@ -1,6 +1,6 @@
 import { ITeamMember } from "@/schemas/team.schema";
 
-export const initialTeamMembers: ITeamMember[] = [
+export const teamMembers: ITeamMember[] = [
   {
     id: 1,
     name: "Manuela Ferraz",
@@ -55,3 +55,6 @@ export const initialTeamMembers: ITeamMember[] = [
     behanceUrl: "https://www.behance.net/caminiss",
   },
 ];
+
+export const initialTeamMembers = teamMembers;
+

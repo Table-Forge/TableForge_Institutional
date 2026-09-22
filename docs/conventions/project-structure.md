@@ -29,7 +29,7 @@ The repository follows Next.js App Router conventions with technical separation 
   - `components/layout/` — Structural layout components (`header.tsx`, `footer.tsx`).
   - `components/blog/` — Blog-specific components (`blog-card.tsx`, `comment-section.tsx`, `taverna-banner.tsx`).
   - `components/taverna/` — Forum-specific components (`category-card.tsx`, `topic-row.tsx`, `reply-item.tsx`, `create-topic-modal.tsx`, `topic-thread-view.tsx`).
-- `data/` — Realistic local mock data and pre-populated community content (`blog.mock.ts`, `taverna.mock.ts`, `team.mock.ts`).
+- `data/` — Realistic local mock data and pre-populated community content (`blog.mock.ts`, `taverna.mock.ts`, `team.data.ts`).
 - `schemas/` — Zod validation schemas and TypeScript types inferred via `z.infer`.
 - `public/` — Static assets (favicons, manifest icons, logos).
 - `docs/` — Project conventions and architecture documentation.
