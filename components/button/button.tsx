@@ -1,10 +1,9 @@
 import React from "react";
+import { D20Icon } from "@/components/ui/icons";
 import type { IButton, ButtonStyles } from "./button.interfaces";
 
 function Loading() {
-  return (
-    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white" />
-  );
+  return <D20Icon className="h-4 w-4 animate-spin" />;
 }
 
 export const Button: React.FC<IButton> = ({
@@ -34,17 +33,19 @@ export const Button: React.FC<IButton> = ({
 
   const widthStyles = maxWidth || className.includes("w-full") ? "w-full" : "w-max";
   const sizeStyles: Record<NonNullable<IButton["size"]>, string> = {
-    xs: "h-7 px-2.5 text-xs rounded-md",
-    sm: "h-8 px-3 text-xs rounded-md",
-    md: "h-10 px-4 text-sm rounded-lg",
-    lg: "h-11 px-5 text-sm font-semibold rounded-lg",
-    xl: "h-12 px-6 text-base font-semibold rounded-xl",
+    xs: "h-7 px-2.5 text-xs chamfer-sm",
+    sm: "h-8 px-3 text-xs chamfer-sm",
+    md: "h-10 px-4 text-sm chamfer-sm",
+    lg: "h-11 px-5 text-sm font-semibold chamfer-sm",
+    xl: "h-12 px-6 text-base font-semibold chamfer-md",
   };
 
+  const forgedHighlight = "shadow-[inset_0_1px_0_rgba(250,243,224,0.22),inset_0_-1px_0_rgba(0,0,0,0.35)]";
+
   const variants: Record<ButtonStyles, string> = {
-    primary: "bg-[#ff2400] border-[#ff2400] text-white hover:brightness-110",
-    secondary: "bg-[#3a3a3a] border-[#4A4A4A] text-white hover:bg-[#4A4A4A]",
-    danger: "bg-red-600 border-red-600 text-white hover:brightness-110",
+    primary: `bg-[#ff2400] border-[#ff2400] text-white hover:brightness-110 ${forgedHighlight}`,
+    secondary: `bg-[#3a3a3a] border-[#4A4A4A] text-white hover:bg-[#4A4A4A] ${forgedHighlight}`,
+    danger: `bg-red-600 border-red-600 text-white hover:brightness-110 ${forgedHighlight}`,
     hollow:
       "bg-transparent border-[#ff2400] text-[#ff2400] hover:bg-[#ff2400]/10",
     soft:

@@ -10,10 +10,53 @@ export interface IBadge extends React.HTMLAttributes<HTMLSpanElement> {
 
 const badgeVariants: Record<NonNullable<IBadge["variant"]>, string> = {
   default: "bg-[#2D2D2D] text-[#D1D1D1] border border-[#4A4A4A]",
-  primary: "bg-[#ff2400]/20 text-[#ff2400] border border-[#ff2400]/40",
+  primary: "bg-[#ff2400]/15 text-[#ff5a36] border border-[#ff2400]/50",
   secondary: "bg-[#3a3a3a] text-[#faf3e0] border border-[#4a4a4a]",
   outline: "bg-transparent text-[#D1D1D1] border border-[#4A4A4A]",
   danger: "bg-red-950/60 text-red-400 border border-red-800/40",
+};
+
+const baseStyles = "inline-flex items-center gap-1.5 chamfer-sm font-semibold uppercase tracking-[0.16em]";
+const sealStyles = "shadow-[inset_0_1px_0_rgba(255,255,255,0.14),inset_0_-1px_0_rgba(0,0,0,0.45)]";
+
+interface ITavernaSeal {
+  label: string;
+  title: string;
+  styles: string;
+  icon: React.ReactNode;
+}
+
+const tavernaSeals: Record<TTavernaBadge, ITavernaSeal> = {
+  FerreiroFundador: {
+    label: "Ferreiro Fundador",
+    title: "Ferreiro Fundador: Membro apoiador dos primeiros dias da Forja",
+    styles: "bg-amber-950/50 text-amber-300 border border-amber-500/40",
+    icon: <Hammer className="h-3 w-3 text-amber-400" />,
+  },
+  MestreDaForja: {
+    label: "Mestre da Forja",
+    title: "Mestre da Forja: Narrador experiente e ativo na comunidade",
+    styles: "bg-purple-950/50 text-purple-300 border border-purple-500/40",
+    icon: <Sparkles className="h-3 w-3 text-purple-400" />,
+  },
+  ParceiroFundador: {
+    label: "Parceiro Fundador",
+    title: "Parceiro Fundador: Espaço geek ou loja credenciada",
+    styles: "bg-[#ff2400]/15 text-[#ff5a36] border border-[#ff2400]/50",
+    icon: <Shield className="h-3 w-3 text-[#ff2400]" />,
+  },
+  CriadorDaForja: {
+    label: "Criador da Forja",
+    title: "Criador da Forja: Produtor de conteúdo parceiro",
+    styles: "bg-cyan-950/50 text-cyan-300 border border-cyan-500/40",
+    icon: <Video className="h-3 w-3 text-cyan-400" />,
+  },
+  Moderador: {
+    label: "Moderador",
+    title: "Moderador da Taverna",
+    styles: "bg-red-950/60 text-red-300 border border-red-600/50",
+    icon: <Flame className="h-3 w-3 text-[#ff2400]" />,
+  },
 };
 
 export function Badge({
@@ -24,73 +67,24 @@ export function Badge({
   className = "",
   ...props
 }: IBadge) {
-  const sizeClasses = size === "sm" ? "text-xs px-2.5 py-0.5" : "text-sm px-3 py-1";
+  const sizeClasses = size === "sm" ? "text-[10px] px-2.5 py-1" : "text-[11px] px-3 py-1.5";
 
   if (tavernaBadge) {
-    switch (tavernaBadge) {
-      case "FerreiroFundador":
-        return (
-          <span
-            className={`inline-flex items-center gap-1 rounded-full font-medium bg-amber-950/50 text-amber-300 border border-amber-500/40 shadow-sm ${sizeClasses} ${className}`}
-            title="Ferreiro Fundador: Membro apoiador dos primeiros dias da Forja"
-            {...props}
-          >
-            <Hammer className="w-3 h-3 text-amber-400" />
-            <span>Ferreiro Fundador</span>
-          </span>
-        );
-      case "MestreDaForja":
-        return (
-          <span
-            className={`inline-flex items-center gap-1 rounded-full font-medium bg-purple-950/50 text-purple-300 border border-purple-500/40 shadow-sm ${sizeClasses} ${className}`}
-            title="Mestre da Forja: Narrador experiente e ativo na comunidade"
-            {...props}
-          >
-            <Sparkles className="w-3 h-3 text-purple-400" />
-            <span>Mestre da Forja</span>
-          </span>
-        );
-      case "ParceiroFundador":
-        return (
-          <span
-            className={`inline-flex items-center gap-1 rounded-full font-medium bg-[#ff2400]/15 text-[#ff5a36] border border-[#ff2400]/50 shadow-sm ${sizeClasses} ${className}`}
-            title="Parceiro Fundador: Espaço geek ou loja credenciada"
-            {...props}
-          >
-            <Shield className="w-3 h-3 text-[#ff2400]" />
-            <span>Parceiro Fundador</span>
-          </span>
-        );
-      case "CriadorDaForja":
-        return (
-          <span
-            className={`inline-flex items-center gap-1 rounded-full font-medium bg-cyan-950/50 text-cyan-300 border border-cyan-500/40 shadow-sm ${sizeClasses} ${className}`}
-            title="Criador da Forja: Produtor de conteúdo parceiro"
-            {...props}
-          >
-            <Video className="w-3 h-3 text-cyan-400" />
-            <span>Criador da Forja</span>
-          </span>
-        );
-      case "Moderador":
-        return (
-          <span
-            className={`inline-flex items-center gap-1 rounded-full font-medium bg-red-950/60 text-red-300 border border-red-600/50 shadow-sm ${sizeClasses} ${className}`}
-            title="Moderador da Taverna"
-            {...props}
-          >
-            <Flame className="w-3 h-3 text-[#ff2400]" />
-            <span>Moderador</span>
-          </span>
-        );
-    }
+    const seal = tavernaSeals[tavernaBadge];
+    return (
+      <span
+        className={`${baseStyles} ${sealStyles} ${seal.styles} ${sizeClasses} ${className}`}
+        title={seal.title}
+        {...props}
+      >
+        {seal.icon}
+        <span>{seal.label}</span>
+      </span>
+    );
   }
 
   return (
-    <span
-      className={`inline-flex items-center gap-1 rounded-full font-medium ${badgeVariants[variant]} ${sizeClasses} ${className}`}
-      {...props}
-    >
+    <span className={`${baseStyles} ${badgeVariants[variant]} ${sizeClasses} ${className}`} {...props}>
       {children}
     </span>
   );

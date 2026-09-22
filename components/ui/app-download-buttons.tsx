@@ -15,7 +15,7 @@ export function AppDownloadButtons({ className = "", size = "md" }: IAppDownload
         href="https://play.google.com/store"
         target="_blank"
         rel="noopener noreferrer"
-        className={`inline-flex items-center gap-3 bg-[#1E1E1E] hover:bg-[#2D2D2D] border border-[#3a3a3a] hover:border-[#ff2400]/50 rounded-xl transition-all duration-200 text-[#faf3e0] shadow-md hover:shadow-[#ff2400]/10 ${
+        className={`inline-flex items-center gap-3 bg-[#1E1E1E] hover:bg-[#2D2D2D] border border-[#3a3a3a] hover:border-[#ff2400]/50 chamfer-sm transition-all duration-200 text-[#faf3e0] shadow-md hover:shadow-[#ff2400]/10 ${
           isSmall ? "px-3 py-1.5" : "px-4 py-2.5"
         }`}
       >
@@ -34,7 +34,7 @@ export function AppDownloadButtons({ className = "", size = "md" }: IAppDownload
         href="https://www.apple.com/app-store/"
         target="_blank"
         rel="noopener noreferrer"
-        className={`inline-flex items-center gap-3 bg-[#1E1E1E] hover:bg-[#2D2D2D] border border-[#3a3a3a] hover:border-[#ff2400]/50 rounded-xl transition-all duration-200 text-[#faf3e0] shadow-md hover:shadow-[#ff2400]/10 ${
+        className={`inline-flex items-center gap-3 bg-[#1E1E1E] hover:bg-[#2D2D2D] border border-[#3a3a3a] hover:border-[#ff2400]/50 chamfer-sm transition-all duration-200 text-[#faf3e0] shadow-md hover:shadow-[#ff2400]/10 ${
           isSmall ? "px-3 py-1.5" : "px-4 py-2.5"
         }`}
       >

@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
+import { Cinzel, Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { AuthProvider } from "@/context/auth-context";
 import { AuthModal } from "@/components/auth/auth-modal";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
+const cinzel = Cinzel({ subsets: ["latin"], weight: "variable", variable: "--font-cinzel", display: "swap" });
 
 export const metadata: Metadata = {
   title: {
@@ -43,7 +47,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className="h-full antialiased">
+    <html lang="pt-BR" className={`h-full antialiased ${inter.variable} ${cinzel.variable}`}>
       <body className="min-h-full flex flex-col bg-[#000000] text-[#faf3e0]">
         <QueryProvider>
           <AuthProvider>

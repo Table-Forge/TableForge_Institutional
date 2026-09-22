@@ -30,9 +30,22 @@ The application operates strictly on a **dark theme**:
 - `white`: `#faf3e0` (soft parchment/cream tone for typography)
 - `black`: `#000000`
 - `grays-50` to `grays-600`: grayscale palette from `#F1F1F1` down to `#1E1E1E`
-- Font: Inter / HUD font stack applied to `body`
+- Fonts: Inter (`--font-inter`, body copy) and Cinzel (`--font-cinzel`, display), both loaded with `next/font/google` in `app/layout.tsx` and exposed as `font-sans` / `font-display`.
 
 Tokens are exposed as standard Tailwind utility classes (`bg-primary`, `text-secondary`, `bg-[#1E1E1E]`, `text-[#faf3e0]`).
+
+---
+
+## The Forge visual language
+
+The site follows the illustration language of the hero (`components/home/hero-banner/`): flat vector shapes, dark outlines, stone/iron surfaces and fire accents. The shared building blocks are:
+
+- **Typography**: page titles, section titles and card titles use `font-display font-bold uppercase` (Cinzel, chiseled capitals) with a light tracking (`tracking-[0.02em]` to `tracking-[0.06em]`). Body copy, form controls, forum topics and long user content stay in Inter.
+- **Forge marks**: every section opens with `SectionHeading` (`components/ui/section-heading.tsx`): a small-caps kicker with the keystone glyph and an optional roman numeral (`I`, `II`, …), the display title and an optional description/action. `ForgeKicker` is available for inline kickers. Do not use pill badges as section kickers.
+- **Surfaces**: containers are stone slabs, never gradient boxes. `Card` renders a flat `#121214` surface with a 1px chiseled edge and two corner brackets; `ForgeBand` renders a full-bleed band with the `stone-pattern` utility and a vignette. Chamfered corners come from the `chamfer-sm` / `chamfer-md` / `chamfer-lg` utilities declared in `app/globals.css`.
+- **Motifs**: `ForgeDivider` (hairline with the keystone glyph), `KeystoneIcon` bullets, wax-seal style community badges (`Badge` with `tavernaBadge`), the d20 spinner in `Button` loading states, and spot illustrations from `components/ui/spot-art.tsx` instead of icons inside tinted squares.
+- **Accents**: only the brand fire palette (`#ff2400`, `#ff5a36`, `#ffb700`, `#faf3e0`) on top of the stone grays. Do not introduce purple/cyan/amber tints for variety; the community badge colors are the single documented exception.
+- **Texture**: a global film grain overlay is applied in `app/globals.css` (`body::after`), so surfaces should stay flat and let the grain add depth.
 
 ---
 
@@ -54,8 +67,10 @@ Community recognition badges follow specific thematic color accents:
 3. **Consistency**: Use the designated token colors across all pages. Do not introduce arbitrary unaligned color palettes.
 4. **Responsive design**: Use Tailwind's default breakpoints (`sm:`, `md:`, `lg:`, `xl:`).
 5. **No CSS-in-JS**: Do not install or import `styled-components` or `@emotion/styled`.
-6. **Button styling**: Buttons follow sleek, compact proportions with `rounded-lg` (and `rounded-md` for xs/sm, `rounded-xl` for xl), natural-case typography (`font-medium` / `font-semibold text-sm`), and scaled heights (`h-7` to `h-12`). They avoid bulky pill shapes (`rounded-2xl`) and forced uppercase, maintaining a clean, modern aesthetic.
-7. **Border-radius hierarchy**: UI elements strictly adhere to the unified border-radius standard:
-   - **Form controls and actions** (Buttons, Inputs, Textareas, Selects, Dropdowns, Nav items): `rounded-lg` (8px). Micro-elements (badges, tags, checkboxes) use `rounded-md` (6px) or `rounded-lg` (8px).
-   - **Surfaces and containers** (Cards, Tables, Modals, Bento boxes, Search capsules, Preview mockups): `rounded-xl` (12px).
-   - Bulky radii (`rounded-2xl` / 16px and `rounded-3xl` / 24px) are prohibited to ensure visual lightness, density, and consistency with the dark medieval HUD design system.
+6. **Button styling**: Buttons follow sleek, compact proportions with chamfered corners (`chamfer-sm`, `chamfer-md` for xl), a forged inset highlight on filled variants, natural-case typography (`font-medium` / `font-semibold text-sm`), and scaled heights (`h-7` to `h-12`). They avoid pill shapes and forced uppercase.
+7. **Corner hierarchy**: UI elements adhere to the forge corner standard:
+   - **Form controls** (Inputs, Textareas, Selects, Dropdowns): `rounded-lg` (8px), keeping fields recognizable as fields.
+   - **Actions and micro-elements** (Buttons, badges, tags, tabs): `chamfer-sm` (6px cut corners).
+   - **Surfaces and containers** (Cards, panels, modals, empty states, preview frames): `chamfer-md` (12px); large editorial pieces (featured article, article cover) use `chamfer-lg` (20px).
+   - Circles stay circular only for physical objects: avatars, medallions, rivets, nails and device screens.
+   - Rounded radii above `rounded-lg` (`rounded-xl`, `rounded-2xl`, `rounded-3xl`) are not used on surfaces.

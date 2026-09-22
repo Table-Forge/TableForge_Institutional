@@ -51,7 +51,7 @@ export function Modal({
         aria-hidden="true"
       />
       <div
-        className={`relative w-full ${maxWidthStyles[maxWidth]} bg-[#1E1E1E] border border-[#3a3a3a] rounded-xl shadow-2xl p-6 text-[#faf3e0] z-10 max-h-[90vh] overflow-y-auto`}
+        className={`relative w-full ${maxWidthStyles[maxWidth]} z-10 max-h-[90vh] chamfer-md overflow-y-auto bg-[#121214] p-6 text-[#faf3e0] ring-1 ring-inset ring-[#3a3a3a]`}
       >
         <div className="flex items-center justify-between pb-4 border-b border-[#2D2D2D] mb-4">
           <h3 className="text-lg font-semibold text-[#faf3e0]">{title}</h3>

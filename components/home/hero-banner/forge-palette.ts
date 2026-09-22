@@ -1,29 +1,6 @@
-export const FORGE_PALETTE = {
-  black: "#000000",
-  void: "#050506",
-  stoneDeep: "#0e0e11",
-  stone: "#18181c",
-  stoneMid: "#25252b",
-  stoneLight: "#2c2c33",
-  iron: "#3a3a3a",
-  ironLight: "#4a4a4a",
-  ironHighlight: "#6a6a6a",
-  woodDeep: "#0f0806",
-  woodDark: "#1a100d",
-  wood: "#1e130f",
-  woodLight: "#2c1a14",
-  leather: "#3a2416",
-  clothDeep: "#8f1c0e",
-  clothShadow: "#5a1408",
-  water: "#0c1824",
-  crimson: "#ff2400",
-  ember: "#ff5a36",
-  orange: "#ff8a1f",
-  gold: "#ffb700",
-  hot: "#fff1c2",
-  cream: "#faf3e0",
-  outline: "#0b0b0d",
-} as const;
+import { FORGE_COLORS } from "@/constants/forge-colors";
+
+export const FORGE_PALETTE = FORGE_COLORS;
 
 export const FORGE_STAGE = { width: 1920, height: 1080 } as const;
 
