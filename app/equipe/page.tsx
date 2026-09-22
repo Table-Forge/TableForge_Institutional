@@ -48,9 +48,11 @@ export default function EquipePage() {
                     />
                   </div>
                 </div>
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap chamfer-sm bg-[#ff2400] px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
-                  Ferreiro
-                </span>
+                {member.area && (
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap chamfer-sm bg-[#ff2400] px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
+                    {member.area}
+                  </span>
+                )}
               </div>
 
               <div className="min-w-0 flex-1 space-y-3">

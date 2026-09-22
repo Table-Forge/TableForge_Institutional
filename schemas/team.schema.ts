@@ -4,6 +4,7 @@ export const TeamMemberSchema = z.object({
   id: z.number(),
   name: z.string(),
   role: z.string(),
+  area: z.string().optional(),
   bio: z.string(),
   avatarUrl: z.string(),
   favoriteSystemOrGame: z.string().optional(),
