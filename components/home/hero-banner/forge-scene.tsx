@@ -1,4 +1,5 @@
 import React from "react";
+import { ANVIL_FACE_EDGE, ANVIL_HORN_EDGE, ANVIL_SILHOUETTE } from "@/constants/forge-shapes";
 import { BRAND_LOGOS } from "@/constants/logos";
 import { FORGE_PALETTE as P, FORGE_STAGE, FORGE_STAGE_CLASS } from "./forge-palette";
 
@@ -27,6 +28,23 @@ function Plane({ forgeKey, left, top, width, height, transform, origin = "50% 50
 
 interface IStonePattern {
   id: string;
+}
+
+interface IBrickPattern {
+  id: string;
+}
+
+function BrickPattern({ id }: IBrickPattern) {
+  return (
+    <pattern id={id} width={96} height={48} patternUnits="userSpaceOnUse">
+      <rect width={96} height={48} fill={P.stoneDeep} />
+      <rect x={2} y={2} width={44} height={20} rx={2} fill={P.stoneLight} />
+      <rect x={50} y={2} width={44} height={20} rx={2} fill={P.stoneMid} />
+      <rect x={-22} y={26} width={44} height={20} rx={2} fill={P.stoneLight} />
+      <rect x={26} y={26} width={44} height={20} rx={2} fill={P.stoneLight} />
+      <rect x={74} y={26} width={44} height={20} rx={2} fill={P.stoneLight} />
+    </pattern>
+  );
 }
 
 function StonePattern({ id }: IStonePattern) {
@@ -343,6 +361,8 @@ function SideWallArt({ side }: ISideWallArt) {
           strokeLinejoin="round"
         />
         <image href={BRAND_LOGOS.local.markDark} x={1375} y={280} width={150} height={150} opacity={0.9} />
+        <SwordShieldTrophy x={1720} y={420} scale={1.4} />
+        <Axe x={1060} y={520} scale={1.15} rotation={-30} />
         <rect width={1900} height={1280} fill={`url(#forge-side-depth-${side})`} />
         <rect width={1900} height={1280} fill={`url(#forge-side-fire-${side})`} />
       </g>
@@ -350,11 +370,22 @@ function SideWallArt({ side }: ISideWallArt) {
   );
 }
 
-const HEARTH_COURSES = [1000, 1100, 1200];
-const HEARTH_JOINTS = [700, 840, 980, 1120];
-const HOOD_RIVETS = [660, 720, 780, 840, 900, 960, 1020, 1080, 1140];
-const WALL_HAMMERS = [1530, 1620, 1710];
+const ARCH_JOINTS = Array.from({ length: 14 }, (_, index) => {
+  const angle = (Math.PI * (index + 1)) / 15;
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+  return `M${(900 - 256 * cos).toFixed(1)} ${(640 - 256 * sin).toFixed(1)} L${(900 - 332 * cos).toFixed(1)} ${(640 - 332 * sin).toFixed(1)}`;
+});
+const JAMB_COURSES = [700, 760, 820, 880];
 const SHELF_HELMETS = [180, 280, 380];
+const BELLOWS_PLEATS = [
+  "M1300 900 L1556.3 813.5",
+  "M1300 900 L1566.6 856.2",
+  "M1300 900 L1570 900",
+  "M1300 900 L1566.6 943.8",
+  "M1300 900 L1556.3 986.5",
+];
+const BELLOWS_BOARDS = ["M1296 896 L1548 768", "M1296 904 L1548 1032"];
 const TROUGH_STAVES = [395, 450, 505];
 
 function BackWallArt() {
@@ -362,6 +393,7 @@ function BackWallArt() {
     <svg viewBox="0 0 1800 1280" className="block h-full w-full">
       <defs>
         <StonePattern id="forge-stone-back" />
+        <BrickPattern id="forge-brick" />
         <radialGradient id="forge-furnace-glow" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor={P.gold} stopOpacity={0.5} />
           <stop offset="35%" stopColor={P.ember} stopOpacity={0.4} />
@@ -381,36 +413,45 @@ function BackWallArt() {
       <rect width={1800} height={1280} fill="url(#forge-stone-back)" />
       <circle data-forge="furnace-glow" cx={900} cy={800} r={900} fill="url(#forge-furnace-glow)" />
 
-      <rect x={800} y={0} width={200} height={392} fill={P.stoneMid} stroke={P.outline} strokeWidth={6} />
-      <rect x={800} y={0} width={200} height={392} fill="url(#forge-chimney-soot)" />
-      <path d="M760 386 H1040 L1180 626 H620 Z" fill={P.stoneLight} stroke={P.outline} strokeWidth={6} strokeLinejoin="round" />
-      <path d="M700 520 H1100" stroke={P.ironLight} strokeWidth={4} opacity={0.5} />
-      {HOOD_RIVETS.map((x) => (
-        <circle key={x} cx={x} cy={604} r={5} fill={P.ironLight} />
+      <path d="M786 330 L830 40 H970 L1014 330 Z" fill="url(#forge-brick)" stroke={P.outline} strokeWidth={6} strokeLinejoin="round" />
+      <path d="M786 330 L830 40 H970 L1014 330 Z" fill="url(#forge-chimney-soot)" />
+      <rect x={800} y={0} width={200} height={48} rx={6} fill={P.stoneLight} stroke={P.outline} strokeWidth={6} />
+      <path d="M560 900 V640 A340 340 0 0 1 1240 640 V900 Z" fill="url(#forge-brick)" stroke={P.outline} strokeWidth={6} strokeLinejoin="round" />
+      <path d="M640 900 V640 A260 260 0 0 1 1160 640 V900 Z" fill={P.black} />
+      <path d="M606 900 V640 A294 294 0 0 1 1194 640 V900" fill="none" stroke={P.stoneMid} strokeWidth={68} />
+      {ARCH_JOINTS.map((d) => (
+        <path key={d} d={d} stroke={P.stoneDeep} strokeWidth={5} />
       ))}
-      <path d="M640 630 H1160" stroke={P.ember} strokeWidth={5} opacity={0.6} />
-      <rect x={640} y={626} width={520} height={284} fill={P.black} />
+      {JAMB_COURSES.map((y) => (
+        <path key={y} d={`M572 ${y} H640 M1160 ${y} H1228`} stroke={P.stoneDeep} strokeWidth={5} />
+      ))}
+      <path d="M572 900 V640 A328 328 0 0 1 1228 640 V900" fill="none" stroke={P.outline} strokeWidth={4} />
+      <path d="M640 900 V640 A260 260 0 0 1 1160 640 V900" fill="none" stroke={P.outline} strokeWidth={4} />
+      <path d="M640 900 V640 A260 260 0 0 1 1160 640 V900" fill="none" stroke={P.ember} strokeWidth={5} opacity={0.6} />
 
-      <rect x={560} y={900} width={680} height={380} fill={P.stoneMid} stroke={P.outline} strokeWidth={6} />
-      {HEARTH_COURSES.map((y) => (
-        <path key={y} d={`M560 ${y} H1240`} stroke={P.stoneDeep} strokeWidth={5} />
-      ))}
-      {HEARTH_JOINTS.map((x) => (
-        <path
-          key={x}
-          d={`M${x} 900 V1000 M${x + 70} 1000 V1100 M${x} 1100 V1200 M${x + 70} 1200 V1280`}
-          stroke={P.stoneDeep}
-          strokeWidth={5}
-        />
-      ))}
+      <rect x={560} y={900} width={680} height={380} fill="url(#forge-brick)" stroke={P.outline} strokeWidth={6} />
+      <rect x={604} y={964} width={592} height={276} rx={4} fill={P.stoneDeep} opacity={0.55} stroke={P.outline} strokeWidth={4} />
       <rect x={540} y={878} width={720} height={36} rx={3} fill={P.stoneLight} stroke={P.outline} strokeWidth={5} />
       <ellipse cx={900} cy={896} rx={250} ry={26} fill={P.black} />
 
-      <path d="M1240 900 L1470 838 L1470 900 Z" fill={P.leather} stroke={P.outline} strokeWidth={5} strokeLinejoin="round" />
-      <path d="M1240 900 L1470 962 L1470 900 Z" fill={P.woodLight} stroke={P.outline} strokeWidth={5} strokeLinejoin="round" />
-      <rect x={1466} y={826} width={110} height={18} rx={7} fill={P.woodLight} stroke={P.outline} strokeWidth={4} />
-      <rect x={1466} y={956} width={110} height={18} rx={7} fill={P.woodLight} stroke={P.outline} strokeWidth={4} />
-      <rect x={1190} y={890} width={60} height={20} rx={4} fill={P.iron} stroke={P.outline} strokeWidth={3} />
+      <rect x={468} y={464} width={96} height={12} rx={4} fill={P.iron} stroke={P.outline} strokeWidth={3} />
+      <path d="M488 476 L512 700 M520 476 L496 700" stroke={P.ironLight} strokeWidth={8} strokeLinecap="round" />
+      <circle cx={504} cy={624} r={6} fill={P.iron} stroke={P.outline} strokeWidth={2} />
+      <path d="M546 476 V704" stroke={P.ironLight} strokeWidth={8} strokeLinecap="round" />
+      <circle cx={546} cy={470} r={9} fill="none" stroke={P.ironLight} strokeWidth={5} />
+
+      <path d="M1290 900 L1539.5 772.9 A280 280 0 0 1 1539.5 1027.1 Z" fill={P.leather} stroke={P.outline} strokeWidth={5} strokeLinejoin="round" />
+      {BELLOWS_PLEATS.map((d) => (
+        <path key={d} d={d} stroke={P.woodDeep} strokeWidth={4} strokeLinecap="round" />
+      ))}
+      {BELLOWS_BOARDS.map((d) => (
+        <g key={d}>
+          <path d={d} stroke={P.outline} strokeWidth={26} strokeLinecap="round" />
+          <path d={d} stroke={P.woodLight} strokeWidth={18} strokeLinecap="round" />
+        </g>
+      ))}
+      <rect x={1232} y={876} width={64} height={48} rx={8} fill={P.iron} stroke={P.outline} strokeWidth={4} />
+      <rect x={1188} y={888} width={48} height={24} rx={4} fill={P.ironLight} stroke={P.outline} strokeWidth={4} />
 
       <rect x={340} y={1056} width={220} height={224} rx={10} fill={P.wood} stroke={P.outline} strokeWidth={5} />
       {TROUGH_STAVES.map((x) => (
@@ -422,13 +463,7 @@ function BackWallArt() {
       <path d="M380 1058 Q450 1046 520 1058" stroke={P.ironHighlight} strokeWidth={3} fill="none" opacity={0.5} />
 
       <rect x={1480} y={300} width={280} height={420} rx={6} fill={P.woodDark} stroke={P.outline} strokeWidth={5} />
-      {WALL_HAMMERS.map((x, index) => (
-        <g key={x}>
-          <line x1={x} y1={360} x2={x} y2={560 + index * 30} stroke={P.woodLight} strokeWidth={12} strokeLinecap="round" />
-          <rect x={x - 30} y={330} width={60} height={34} rx={6} fill={P.ironLight} stroke={P.outline} strokeWidth={4} />
-        </g>
-      ))}
-      <path d="M1520 640 L1600 690 M1600 640 L1520 690" stroke={P.ironLight} strokeWidth={8} strokeLinecap="round" />
+      <CrossedAxes x={1620} y={505} scale={1.5} />
 
       <rect x={120} y={440} width={320} height={18} fill={P.woodLight} stroke={P.outline} strokeWidth={4} />
       {SHELF_HELMETS.map((x) => (
@@ -526,10 +561,6 @@ function HazeArt() {
 
 const ANVIL_SCALE = 1.9;
 const ANVIL_OFFSET = { x: 38.4, y: -45.3 };
-const ANVIL_SILHOUETTE =
-  "M248,91.3V67H80v8H9c0,0,10.7,40.6,67.3,40.6c30.3,0,34.4,12.7,34.4,19.1c0,8.4-5.1,21.9-36.7,32.8V191h38.7c6.8-5.2,15.3-8.2,24.5-8.2s17.7,3.1,24.5,8.2H201c0,0,0-15.1,0-22.9c-23.4-7.7-38.7-20.4-38.7-34.8C162.3,110.6,200.1,92.5,248,91.3z";
-const ANVIL_FACE_EDGE = "M88,79v-4h152v4H88z";
-const ANVIL_HORN_EDGE = "M80,87c-52,0-52-4-52-4h52C80,83,80,85.4,80,87z";
 
 const DIE_RADIUS = 44;
 const DIE_CENTER = { x: 350, y: 82 - DIE_RADIUS };
@@ -631,6 +662,103 @@ function AnvilArt() {
   );
 }
 
+interface IProp {
+  x: number;
+  y: number;
+  scale?: number;
+  rotation?: number;
+}
+
+function Shield({ x, y, scale = 1 }: IProp) {
+  return (
+    <g transform={`translate(${x} ${y}) scale(${scale})`}>
+      <circle r={70} fill={P.iron} stroke={P.outline} strokeWidth={4} />
+      <circle r={56} fill={P.ironLight} stroke={P.outline} strokeWidth={2} />
+      <path d="M0 -56 V-18 M0 18 V56 M-56 0 H-18 M18 0 H56" stroke={P.ironHighlight} strokeWidth={9} strokeLinecap="round" />
+      <path d="M-34 -44 h14 M-44 -34 h14 M20 40 h14 M30 30 h14" stroke={P.ironHighlight} strokeWidth={3} strokeLinecap="round" />
+      <circle r={17} fill={P.gold} stroke={P.outline} strokeWidth={3} />
+      <circle r={6} fill={P.cream} />
+    </g>
+  );
+}
+
+function Sword({ x, y, scale = 1, rotation = 0 }: IProp) {
+  return (
+    <g transform={`translate(${x} ${y}) rotate(${rotation}) scale(${scale})`}>
+      <path d="M0 -150 L10 -132 L10 -8 H-10 V-132 Z" fill={P.ironHighlight} stroke={P.outline} strokeWidth={3} strokeLinejoin="round" />
+      <path d="M0 -128 V-14" stroke={P.cream} strokeWidth={2} strokeOpacity={0.35} />
+      <path d="M-28 -8 Q0 -18 28 -8 Q0 2 -28 -8 Z" fill={P.leather} stroke={P.outline} strokeWidth={3} strokeLinejoin="round" />
+      <rect x={-6} y={-4} width={12} height={34} fill={P.woodLight} stroke={P.outline} strokeWidth={3} />
+      <path d="M-6 6 H6 M-6 14 H6 M-6 22 H6" stroke={P.woodDeep} strokeWidth={2} />
+      <circle cx={0} cy={36} r={7} fill={P.iron} stroke={P.outline} strokeWidth={3} />
+    </g>
+  );
+}
+
+function Axe({ x, y, scale = 1, rotation = 0 }: IProp) {
+  return (
+    <g transform={`translate(${x} ${y}) rotate(${rotation}) scale(${scale})`}>
+      <path d="M-5 -150 H5 V60 H-5 Z" fill={P.woodLight} stroke={P.outline} strokeWidth={3} />
+      <path d="M-6 16 H6 M-6 28 H6 M-6 40 H6" stroke={P.leather} strokeWidth={3} />
+      <path
+        d="M4 -150 L48 -138 C70 -122 72 -90 44 -64 L4 -74 Z"
+        fill={P.ironHighlight}
+        stroke={P.outline}
+        strokeWidth={3}
+        strokeLinejoin="round"
+      />
+      <path d="M16 -138 C40 -126 50 -104 42 -82" stroke={P.cream} strokeWidth={2} strokeOpacity={0.35} fill="none" />
+      <rect x={-10} y={-152} width={20} height={32} rx={3} fill={P.iron} stroke={P.outline} strokeWidth={3} />
+    </g>
+  );
+}
+
+function SwordShieldTrophy({ x, y, scale = 1 }: IProp) {
+  return (
+    <g transform={`translate(${x} ${y}) scale(${scale})`}>
+      <g transform="rotate(45)">
+        <Sword x={0} y={64.2} scale={1.2} />
+      </g>
+      <g transform="rotate(-45)">
+        <Sword x={0} y={64.2} scale={1.2} />
+      </g>
+      <Shield x={0} y={0} />
+    </g>
+  );
+}
+
+function CrossedAxes({ x, y, scale = 1 }: IProp) {
+  return (
+    <g transform={`translate(${x} ${y}) scale(${scale})`}>
+      <g transform="rotate(28)">
+        <Axe x={0} y={46} />
+      </g>
+      <g transform="rotate(-28) scale(-1 1)">
+        <Axe x={0} y={46} />
+      </g>
+    </g>
+  );
+}
+
+function Barrel({ x, y, scale = 1 }: IProp) {
+  return (
+    <g transform={`translate(${x} ${y}) scale(${scale})`}>
+      <path
+        d="M-60 -170 C-78 -120 -78 -50 -60 0 H60 C78 -50 78 -120 60 -170 Z"
+        fill={P.woodLight}
+        stroke={P.outline}
+        strokeWidth={4}
+        strokeLinejoin="round"
+      />
+      <path d="M-30 -168 C-40 -120 -40 -50 -30 -2 M0 -170 V-2 M30 -168 C40 -120 40 -50 30 -2" stroke={P.woodDeep} strokeWidth={3} fill="none" />
+      <path d="M-63 -140 H63 M-71 -108 H71 M-71 -62 H71 M-64 -30 H64" stroke={P.iron} strokeWidth={9} />
+      <path d="M-63 -140 H63 M-71 -108 H71 M-71 -62 H71 M-64 -30 H64" stroke={P.outline} strokeWidth={1.5} strokeOpacity={0.6} />
+      <ellipse cx={0} cy={-170} rx={60} ry={10} fill={P.wood} stroke={P.outline} strokeWidth={3} />
+      <circle cx={0} cy={-85} r={6} fill={P.outline} />
+    </g>
+  );
+}
+
 function RackArt() {
   return (
     <svg viewBox="0 0 360 460" className="block h-full w-full">
@@ -639,39 +767,20 @@ function RackArt() {
       <rect x={322} y={40} width={18} height={420} fill={P.woodLight} stroke={P.outline} strokeWidth={3} />
       <rect x={20} y={120} width={320} height={14} fill={P.woodLight} stroke={P.outline} strokeWidth={3} />
       <rect x={20} y={300} width={320} height={14} fill={P.woodLight} stroke={P.outline} strokeWidth={3} />
-      <line x1={80} y1={60} x2={80} y2={330} stroke={P.ironLight} strokeWidth={10} strokeLinecap="round" />
-      <line x1={80} y1={60} x2={80} y2={330} stroke={P.ironHighlight} strokeWidth={3} strokeLinecap="round" />
-      <rect x={55} y={330} width={50} height={10} rx={3} fill={P.leather} stroke={P.outline} strokeWidth={2} />
-      <line x1={80} y1={340} x2={80} y2={384} stroke={P.woodLight} strokeWidth={12} strokeLinecap="round" />
-      <circle cx={80} cy={392} r={8} fill={P.ironLight} stroke={P.outline} strokeWidth={2} />
-      <line x1={280} y1={60} x2={280} y2={330} stroke={P.ironLight} strokeWidth={10} strokeLinecap="round" />
-      <line x1={280} y1={60} x2={280} y2={330} stroke={P.ironHighlight} strokeWidth={3} strokeLinecap="round" />
-      <rect x={255} y={330} width={50} height={10} rx={3} fill={P.leather} stroke={P.outline} strokeWidth={2} />
-      <line x1={280} y1={340} x2={280} y2={384} stroke={P.woodLight} strokeWidth={12} strokeLinecap="round" />
-      <circle cx={280} cy={392} r={8} fill={P.ironLight} stroke={P.outline} strokeWidth={2} />
-      <circle cx={180} cy={210} r={82} fill={P.stoneMid} stroke={P.outline} strokeWidth={6} />
-      <rect x={168} y={130} width={24} height={160} fill={P.clothDeep} />
-      <rect x={100} y={198} width={160} height={24} fill={P.clothDeep} />
-      <circle cx={180} cy={210} r={68} fill="none" stroke={P.iron} strokeWidth={6} />
-      <circle cx={180} cy={210} r={16} fill={P.ironLight} stroke={P.outline} strokeWidth={3} />
+      <Sword x={72} y={236} scale={1.15} />
+      <Sword x={288} y={236} scale={1.15} />
+      <Shield x={180} y={196} scale={1.15} />
+      <Axe x={240} y={378} scale={0.8} rotation={-90} />
     </svg>
   );
 }
 
 function BarrelsArt() {
   return (
-    <svg viewBox="0 0 300 300" className="block h-full w-full">
-      <ellipse cx={150} cy={294} rx={140} ry={8} fill={P.black} opacity={0.6} />
-      <rect x={20} y={60} width={130} height={240} rx={28} fill={P.woodLight} stroke={P.outline} strokeWidth={5} />
-      <path d="M52 66 V294 M85 62 V298 M118 66 V294" stroke={P.woodDeep} strokeWidth={4} />
-      <rect x={14} y={100} width={142} height={14} fill={P.iron} stroke={P.outline} strokeWidth={3} />
-      <rect x={14} y={240} width={142} height={14} fill={P.iron} stroke={P.outline} strokeWidth={3} />
-      <ellipse cx={85} cy={62} rx={64} ry={14} fill={P.wood} stroke={P.outline} strokeWidth={4} />
-      <rect x={164} y={120} width={116} height={180} rx={24} fill={P.wood} stroke={P.outline} strokeWidth={5} />
-      <path d="M194 124 V298 M222 122 V300 M250 124 V298" stroke={P.woodDeep} strokeWidth={4} />
-      <rect x={158} y={156} width={128} height={12} fill={P.iron} stroke={P.outline} strokeWidth={3} />
-      <rect x={158} y={256} width={128} height={12} fill={P.iron} stroke={P.outline} strokeWidth={3} />
-      <ellipse cx={222} cy={122} rx={58} ry={12} fill={P.woodDark} stroke={P.outline} strokeWidth={4} />
+    <svg viewBox="0 0 300 300" className="block h-full w-full overflow-visible">
+      <ellipse cx={150} cy={294} rx={150} ry={8} fill={P.black} opacity={0.6} />
+      <Barrel x={96} y={296} scale={1.5} />
+      <Barrel x={228} y={296} scale={1.1} />
     </svg>
   );
 }
