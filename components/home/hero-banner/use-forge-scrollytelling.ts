@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { Physics2DPlugin } from "gsap/Physics2DPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { RefObject } from "react";
+import { playForgeStrike, setForgeFire } from "./forge-audio";
 import { createForgeBurnRenderer } from "./forge-burn-renderer";
 import { BURN_ORIGIN, FORGE_STAGE } from "./forge-palette";
 
@@ -25,6 +26,7 @@ const CAMERA_LEAN = 40;
 const DESKTOP_MIN_WIDTH = 1024;
 const DESKTOP_STAGE_SHIFT = 0.14;
 const GRIP = { x: 1230, y: 603 };
+const FIRE_START_TIME = 0.3;
 const STORY_COMPLETED_KEY = "forge-hero-story-completed";
 
 const readStoryCompleted = () => {
@@ -32,6 +34,14 @@ const readStoryCompleted = () => {
     return window.sessionStorage.getItem(STORY_COMPLETED_KEY) === "1";
   } catch {
     return false;
+  }
+};
+
+export const clearForgeStory = () => {
+  try {
+    window.sessionStorage.removeItem(STORY_COMPLETED_KEY);
+  } catch {
+    return;
   }
 };
 
@@ -43,17 +53,10 @@ const markStoryCompleted = () => {
   }
 };
 
-const syncAmbient = (ambient: gsap.core.Timeline) => (self: ScrollTrigger) => {
-  if (self.isActive) {
-    ambient.play();
-  } else {
-    ambient.pause();
-  }
-};
 const DIE_BASE = { x: 350, y: 82 };
 const SCROLL_KEYS = new Set(["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Space", "Home", "End"]);
 
-export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
+export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>, replayToken: number) {
   useGSAP(
     () => {
       const root = rootRef.current;
@@ -116,8 +119,21 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
         gsap.set(canvas, { autoAlpha: 0 });
       }
 
+      const atmosphere = { doorsOpen: false, inView: false };
+      const applyAtmosphere = () => setForgeFire(atmosphere.doorsOpen && atmosphere.inView);
+      const syncAtmosphere = (ambient: gsap.core.Timeline) => (self: ScrollTrigger) => {
+        atmosphere.inView = self.isActive;
+        applyAtmosphere();
+        if (self.isActive) {
+          ambient.play();
+        } else {
+          ambient.pause();
+        }
+      };
+
       applyPose();
-      gsap.set(one("content"), { autoAlpha: 0 });
+      applyAtmosphere();
+      gsap.set([one("content"), one("controls")], { autoAlpha: 0 });
 
       const scrollLock = { active: false, position: 0 };
       const blockScrollEvent = (event: Event) => {
@@ -138,6 +154,10 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
 
       const buildMaster = () => {
         const timeline = gsap.timeline({ paused: true, defaults: { ease: "none" } });
+        timeline.eventCallback("onUpdate", () => {
+          atmosphere.doorsOpen = timeline.time() >= FIRE_START_TIME;
+          applyAtmosphere();
+        });
         const doorLeft = one("door-left");
         const doorRight = one("door-right");
         const world = one("world");
@@ -212,7 +232,9 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
             { autoAlpha: 0, y: 46, scale: 0.96 },
             { autoAlpha: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" },
             0.45,
-          );
+          )
+          .fromTo(one("controls"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0.6)
+          .call(playForgeStrike, undefined, 0.14);
 
         many("spark").forEach((spark) => {
           timeline.fromTo(
@@ -304,22 +326,18 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
         (context) => {
           const master = buildMaster();
           const strike = buildStrike();
+          const ambient = buildAmbient();
           const reducedMotion = Boolean(context.conditions?.reduced);
+          const watchAmbient = () =>
+            ScrollTrigger.create({ trigger: root, start: "top bottom", end: "bottom top", onToggle: syncAtmosphere(ambient) });
 
           if (reducedMotion || readStoryCompleted()) {
             master.progress(1);
             strike.progress(1);
-            if (reducedMotion) return;
-            ScrollTrigger.create({
-              trigger: root,
-              start: "top bottom",
-              end: "bottom top",
-              onToggle: syncAmbient(buildAmbient()),
-            });
+            if (!reducedMotion) watchAmbient();
             return;
           }
 
-          const ambient = buildAmbient();
           let struck = false;
           let unlockTimeout = 0;
 
@@ -333,6 +351,18 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
             unlockTimeout = window.setTimeout(releaseScroll, READING_LOCK_MS);
           });
 
+          const settle = (self: ScrollTrigger, scrollY: number) => {
+            releaseScroll();
+            markStoryCompleted();
+            self.kill(undefined, true);
+            self.getTween()?.kill();
+            master.progress(1, true);
+            strike.render(strike.totalDuration(), true, true);
+            applyPose();
+            window.scrollTo(0, scrollY);
+            watchAmbient();
+          };
+
           ScrollTrigger.create({
             animation: master,
             trigger: root,
@@ -342,7 +372,8 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
             scrub: 0.5,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            onToggle: syncAmbient(ambient),
+            onToggle: syncAtmosphere(ambient),
+            onLeave: (self) => settle(self, window.scrollY - (self.end - self.start)),
             onUpdate: (self) => {
               if (!struck && self.progress >= STRIKE_PROGRESS) {
                 struck = true;
@@ -353,9 +384,7 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
                 unlockTimeout = window.setTimeout(releaseScroll, SCROLL_LOCK_TIMEOUT_MS);
                 strike.play();
               } else if (struck && self.progress < STRIKE_RELEASE_PROGRESS) {
-                struck = false;
-                releaseScroll();
-                strike.reverse();
+                settle(self, self.start);
               }
             },
           });
@@ -364,7 +393,10 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
         },
       );
 
+      gsap.to(one("veil"), { autoAlpha: 0, duration: 0.45, ease: "power1.out" });
+
       return () => {
+        setForgeFire(false);
         resizeObserver.disconnect();
         gsap.ticker.remove(renderBurn);
         window.removeEventListener("wheel", blockScrollEvent);
@@ -374,6 +406,6 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
         renderer?.destroy();
       };
     },
-    { scope: rootRef },
+    { scope: rootRef, dependencies: [replayToken], revertOnUpdate: true },
   );
 }
