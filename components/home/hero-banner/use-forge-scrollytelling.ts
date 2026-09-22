@@ -332,8 +332,11 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>, r
             ScrollTrigger.create({ trigger: root, start: "top bottom", end: "bottom top", onToggle: syncAtmosphere(ambient) });
 
           if (reducedMotion || readStoryCompleted()) {
-            master.progress(1);
-            strike.progress(1);
+            master.progress(1, true);
+            strike.progress(1, true);
+            applyPose();
+            atmosphere.doorsOpen = true;
+            applyAtmosphere();
             if (!reducedMotion) watchAmbient();
             return;
           }
