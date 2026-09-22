@@ -24,7 +24,7 @@ export const initialTeamMembers: ITeamMember[] = [
   {
     id: 3,
     name: "Wagner Barbosa",
-    role: "Desenvolvedor Back-End",
+    role: "Engenheiro de Back-End e Segurança da Informação",
     bio: "O artífice por trás das engrenagens. Wagner garante que a arquitetura do TableForge funcione com precisão, segurança e escalabilidade. Mesmo que sua arena seja o código limpo e os bancos de dados em vez de tavernas e tabuleiros, sua paixão por engenharia de software constrói a base sólida que sustenta todas as nossas aventuras e sistemas de fichas.",
     avatarUrl: "https://table-forge.s3.amazonaws.com/development/public/images/a23880e5-269e-4f5b-bc00-7bf47016e39e.webp?v=1",
     githubUrl: "https://github.com/EngWagner",
