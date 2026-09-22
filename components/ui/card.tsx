@@ -1,6 +1,7 @@
 import React from "react";
 
 export interface ICard extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: "default" | "surface" | "interactive";
   padding?: "none" | "sm" | "md";
 }
 
