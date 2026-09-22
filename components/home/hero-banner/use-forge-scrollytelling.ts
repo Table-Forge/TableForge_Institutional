@@ -24,8 +24,33 @@ const CAMERA_DEPTH = 1000;
 const CAMERA_LEAN = 40;
 const DESKTOP_MIN_WIDTH = 1024;
 const DESKTOP_STAGE_SHIFT = 0.14;
-const GRIP = { x: 1230, y: 667 };
-const INGOT_BASE = { x: 360, y: 82 };
+const GRIP = { x: 1230, y: 603 };
+const STORY_COMPLETED_KEY = "forge-hero-story-completed";
+
+const readStoryCompleted = () => {
+  try {
+    return window.sessionStorage.getItem(STORY_COMPLETED_KEY) === "1";
+  } catch {
+    return false;
+  }
+};
+
+const markStoryCompleted = () => {
+  try {
+    window.sessionStorage.setItem(STORY_COMPLETED_KEY, "1");
+  } catch {
+    return;
+  }
+};
+
+const syncAmbient = (ambient: gsap.core.Timeline) => (self: ScrollTrigger) => {
+  if (self.isActive) {
+    ambient.play();
+  } else {
+    ambient.pause();
+  }
+};
+const DIE_BASE = { x: 350, y: 82 };
 const SCROLL_KEYS = new Set(["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Space", "Home", "End"]);
 
 export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
@@ -42,15 +67,15 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
       const renderer = createForgeBurnRenderer(canvas);
       const burn = { progress: 0, dirty: true };
       const tension = { value: 0 };
-      const pose = { hammer: 0, lift: 0, ingotX: 1, ingotY: 1 };
+      const pose = { hammer: 0, lift: 0, dieX: 1, dieY: 1 };
       const hammer = one("hammer");
-      const ingot = one("ingot");
+      const die = one("die");
 
       const applyPose = () => {
         hammer.setAttribute("transform", `translate(0 ${-pose.lift}) rotate(${pose.hammer} ${GRIP.x} ${GRIP.y})`);
-        ingot.setAttribute(
+        die.setAttribute(
           "transform",
-          `translate(${INGOT_BASE.x} ${INGOT_BASE.y}) scale(${pose.ingotX} ${pose.ingotY}) translate(${-INGOT_BASE.x} ${-INGOT_BASE.y})`,
+          `translate(${DIE_BASE.x} ${DIE_BASE.y}) scale(${pose.dieX} ${pose.dieY}) translate(${-DIE_BASE.x} ${-DIE_BASE.y})`,
         );
       };
 
@@ -93,12 +118,6 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
 
       applyPose();
       gsap.set(one("content"), { autoAlpha: 0 });
-
-      const previousScrollRestoration = window.history.scrollRestoration;
-      if (!window.location.hash) {
-        ScrollTrigger.clearScrollMemory("manual");
-        window.scrollTo(0, 0);
-      }
 
       const scrollLock = { active: false, position: 0 };
       const blockScrollEvent = (event: Event) => {
@@ -149,7 +168,7 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
           .fromTo(one("hammer-layer"), { y: 640 }, { y: 0, duration: 0.1, ease: "power2.out" }, 0.6)
           .to(pose, { hammer: 60, lift: 50, duration: 0.2, ease: "power2.inOut", onUpdate: applyPose }, 0.7)
           .to(tension, { value: 1, duration: 0.2 }, 0.7)
-          .to(one("ingot-heat"), { opacity: 0.85, duration: 0.2 }, 0.7)
+          .to(one("die-heat"), { opacity: 0.85, duration: 0.2 }, 0.7)
           .to(world, { z: CAMERA_DEPTH + CAMERA_LEAN, duration: 0.2, ease: "power1.in" }, 0.7)
           .to({}, { duration: READING_HOLD }, STORY_END);
 
@@ -161,10 +180,11 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
 
         timeline
           .to(pose, { hammer: 0, lift: 0, duration: 0.14, ease: "power4.in", onUpdate: applyPose }, 0)
-          .to(pose, { ingotX: 1.2, ingotY: 0.62, duration: 0.08, ease: "power2.out", onUpdate: applyPose }, 0.14)
+          .to(pose, { dieX: 1.08, dieY: 0.88, duration: 0.06, ease: "power2.out", onUpdate: applyPose }, 0.14)
+          .to(pose, { dieX: 1, dieY: 1, duration: 0.35, ease: "elastic.out(1, 0.45)", onUpdate: applyPose }, 0.2)
           .to(tension, { value: 0, duration: 0.12 }, 0.14)
-          .fromTo(one("ingot-heat"), { opacity: 0.85 }, { opacity: 1, duration: 0.05 }, 0.14)
-          .to(one("ingot-heat"), { opacity: 0.5, duration: 0.9 }, 0.2)
+          .fromTo(one("die-heat"), { opacity: 0.85 }, { opacity: 1, duration: 0.05 }, 0.14)
+          .to(one("die-heat"), { opacity: 0, duration: 0.9 }, 0.2)
           .fromTo(one("flash"), { opacity: 0 }, { opacity: 0.95, duration: 0.05 }, 0.14)
           .to(one("flash"), { opacity: 0, duration: 0.5, ease: "power2.out" }, 0.19)
           .fromTo(
@@ -236,7 +256,7 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
         loop(one("furnace-glow"), { opacity: 0.7, duration: 0.9 });
         loop(one("haze-pulse"), { opacity: 0.6, duration: 1.4 });
         loop(one("fire-glow"), { opacity: 0.7, scale: 1.08, duration: 0.5, transformOrigin: "50% 50%" });
-        loop(one("ingot-glow"), { opacity: 0.55, duration: 0.5 });
+        loop(one("die-glow"), { opacity: 0.55, duration: 0.5 });
         loop(one("ignite-glow"), { scale: 1.18, opacity: 0.65, duration: 0.9, transformOrigin: "50% 50%" });
         loop(one("seam-pulse"), { opacity: 0.6, duration: 0.7 });
 
@@ -284,10 +304,18 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
         (context) => {
           const master = buildMaster();
           const strike = buildStrike();
+          const reducedMotion = Boolean(context.conditions?.reduced);
 
-          if (context.conditions?.reduced) {
+          if (reducedMotion || readStoryCompleted()) {
             master.progress(1);
             strike.progress(1);
+            if (reducedMotion) return;
+            ScrollTrigger.create({
+              trigger: root,
+              start: "top bottom",
+              end: "bottom top",
+              onToggle: syncAmbient(buildAmbient()),
+            });
             return;
           }
 
@@ -300,6 +328,7 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
             window.clearTimeout(unlockTimeout);
           };
           strike.eventCallback("onComplete", () => {
+            markStoryCompleted();
             window.clearTimeout(unlockTimeout);
             unlockTimeout = window.setTimeout(releaseScroll, READING_LOCK_MS);
           });
@@ -313,13 +342,7 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
             scrub: 0.5,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            onToggle: (self) => {
-              if (self.isActive) {
-                ambient.play();
-              } else {
-                ambient.pause();
-              }
-            },
+            onToggle: syncAmbient(ambient),
             onUpdate: (self) => {
               if (!struck && self.progress >= STRIKE_PROGRESS) {
                 struck = true;
@@ -348,7 +371,6 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>) {
         window.removeEventListener("touchmove", blockScrollEvent);
         window.removeEventListener("keydown", blockScrollKeys);
         window.removeEventListener("scroll", holdScrollPosition);
-        window.history.scrollRestoration = previousScrollRestoration;
         renderer?.destroy();
       };
     },

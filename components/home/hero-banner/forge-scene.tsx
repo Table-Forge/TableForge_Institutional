@@ -531,6 +531,33 @@ const ANVIL_SILHOUETTE =
 const ANVIL_FACE_EDGE = "M88,79v-4h152v4H88z";
 const ANVIL_HORN_EDGE = "M80,87c-52,0-52-4-52-4h52C80,83,80,85.4,80,87z";
 
+const DIE_RADIUS = 44;
+const DIE_CENTER = { x: 350, y: 82 - DIE_RADIUS };
+const dieVertex = (x: number, y: number) =>
+  `${(DIE_CENTER.x + x * DIE_RADIUS).toFixed(1)},${(DIE_CENTER.y + y * DIE_RADIUS).toFixed(1)}`;
+const DIE_TOP = dieVertex(0, -1);
+const DIE_UPPER_RIGHT = dieVertex(0.866, -0.5);
+const DIE_LOWER_RIGHT = dieVertex(0.866, 0.5);
+const DIE_BOTTOM = dieVertex(0, 1);
+const DIE_LOWER_LEFT = dieVertex(-0.866, 0.5);
+const DIE_UPPER_LEFT = dieVertex(-0.866, -0.5);
+const DIE_FACE_TOP = dieVertex(0, -0.44);
+const DIE_FACE_LEFT = dieVertex(-0.5, 0.41);
+const DIE_FACE_RIGHT = dieVertex(0.5, 0.41);
+const DIE_HULL = [DIE_TOP, DIE_UPPER_RIGHT, DIE_LOWER_RIGHT, DIE_BOTTOM, DIE_LOWER_LEFT, DIE_UPPER_LEFT];
+const DIE_FACES = [
+  { points: [DIE_TOP, DIE_UPPER_LEFT, DIE_FACE_TOP], fill: P.ember },
+  { points: [DIE_TOP, DIE_FACE_TOP, DIE_UPPER_RIGHT], fill: P.ember },
+  { points: [DIE_UPPER_LEFT, DIE_LOWER_LEFT, DIE_FACE_LEFT], fill: P.ember },
+  { points: [DIE_UPPER_RIGHT, DIE_FACE_RIGHT, DIE_LOWER_RIGHT], fill: P.ember },
+  { points: [DIE_LOWER_LEFT, DIE_BOTTOM, DIE_FACE_LEFT], fill: P.ember },
+  { points: [DIE_FACE_RIGHT, DIE_BOTTOM, DIE_LOWER_RIGHT], fill: P.ember },
+  { points: [DIE_FACE_TOP, DIE_UPPER_LEFT, DIE_FACE_LEFT], fill: P.orange },
+  { points: [DIE_FACE_TOP, DIE_FACE_RIGHT, DIE_UPPER_RIGHT], fill: P.orange },
+  { points: [DIE_FACE_LEFT, DIE_BOTTOM, DIE_FACE_RIGHT], fill: P.orange },
+  { points: [DIE_FACE_TOP, DIE_FACE_LEFT, DIE_FACE_RIGHT], fill: P.gold },
+];
+
 function AnvilArt() {
   return (
     <svg viewBox="0 0 700 460" className="block h-full w-full overflow-visible">
@@ -540,14 +567,9 @@ function AnvilArt() {
           <stop offset="50%" stopColor={P.iron} />
           <stop offset="100%" stopColor={P.stone} />
         </linearGradient>
-        <linearGradient id="forge-ingot-grad" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor={P.ember} />
-          <stop offset="50%" stopColor={P.gold} />
-          <stop offset="100%" stopColor={P.ember} />
-        </linearGradient>
-        <radialGradient id="forge-ingot-glow">
-          <stop offset="0%" stopColor={P.gold} stopOpacity={0.8} />
-          <stop offset="40%" stopColor={P.crimson} stopOpacity={0.45} />
+        <radialGradient id="forge-die-glow">
+          <stop offset="0%" stopColor={P.gold} stopOpacity={0.85} />
+          <stop offset="45%" stopColor={P.crimson} stopOpacity={0.4} />
           <stop offset="100%" stopColor={P.crimson} stopOpacity={0} />
         </radialGradient>
       </defs>
@@ -569,10 +591,32 @@ function AnvilArt() {
         <path d={ANVIL_HORN_EDGE} fill={P.ironHighlight} opacity={0.5} />
       </g>
 
-      <ellipse data-forge="ingot-glow" cx={360} cy={84} rx={130} ry={30} fill="url(#forge-ingot-glow)" />
-      <g data-forge="ingot">
-        <rect x={300} y={58} width={120} height={24} rx={4} fill="url(#forge-ingot-grad)" stroke={P.clothShadow} strokeWidth={3} />
-        <rect data-forge="ingot-heat" x={300} y={58} width={120} height={24} rx={4} fill={P.hot} opacity={0} />
+      <ellipse data-forge="die-glow" cx={DIE_CENTER.x} cy={DIE_CENTER.y} rx={120} ry={80} fill="url(#forge-die-glow)" />
+      <g data-forge="die">
+        {DIE_FACES.map((face) => (
+          <polygon
+            key={face.points.join(" ")}
+            points={face.points.join(" ")}
+            fill={face.fill}
+            stroke={P.clothShadow}
+            strokeWidth={1.5}
+            strokeLinejoin="round"
+          />
+        ))}
+        <polygon points={DIE_HULL.join(" ")} fill="none" stroke={P.outline} strokeWidth={3} strokeLinejoin="round" />
+        <polygon data-forge="die-heat" points={DIE_HULL.join(" ")} fill={P.hot} opacity={0} />
+        <text
+          x={DIE_CENTER.x}
+          y={DIE_CENTER.y + DIE_RADIUS * 0.14}
+          fontSize={DIE_RADIUS * 0.4}
+          fontWeight={900}
+          fill={P.clothShadow}
+          textAnchor="middle"
+          dominantBaseline="central"
+          letterSpacing={-1}
+        >
+          20
+        </text>
       </g>
 
       <path d="M200 320 L112 442 M212 326 L136 448" stroke={P.iron} strokeWidth={9} strokeLinecap="round" />
@@ -683,7 +727,8 @@ function createSeededRandom(seed: number) {
 const sparkRandom = createSeededRandom(2026);
 const SPARK_COLORS = [P.hot, P.gold, P.ember, P.crimson];
 const IMPACT_X = 960;
-const IMPACT_Y = 676;
+const HAMMER_REST_SHIFT = 64;
+const IMPACT_Y = 676 - HAMMER_REST_SHIFT;
 
 const SPARK_SPECS = Array.from({ length: 44 }, (_, index) => {
   const angle = sparkRandom() * Math.PI * 2;
@@ -728,20 +773,22 @@ function ForegroundArt() {
       <g data-forge="hammer-layer">
         <g data-forge="hammer-shake">
           <g data-forge="hammer">
-            <line x1={1236} y1={668} x2={978} y2={605} stroke={P.outline} strokeWidth={32} strokeLinecap="round" />
-            <line x1={1236} y1={668} x2={978} y2={605} stroke={P.leather} strokeWidth={22} strokeLinecap="round" />
-            <line x1={1230} y1={662} x2={984} y2={602} stroke={P.woodLight} strokeWidth={6} strokeLinecap="round" opacity={0.7} />
-            {GRIP_WRAPS.map(([x1, y1, x2, y2]) => (
-              <line key={x1} x1={x1} y1={y1} x2={x2} y2={y2} stroke={P.cream} strokeWidth={3} opacity={0.75} />
-            ))}
-            <circle cx={1236} cy={668} r={16} fill={P.iron} stroke={P.outline} strokeWidth={4} />
-            <g transform="translate(978 605) rotate(-76)">
-              <rect x={-76} y={-52} width={152} height={104} rx={12} fill={P.outline} />
-              <rect x={-72} y={-48} width={144} height={96} rx={10} fill="url(#forge-hammer-steel)" />
-              <rect x={-72} y={-48} width={18} height={96} rx={4} fill={P.ironLight} />
-              <rect x={54} y={-48} width={18} height={96} rx={4} fill={P.ironLight} />
-              <line x1={-66} y1={-40} x2={66} y2={-40} stroke={P.ironHighlight} strokeWidth={6} strokeLinecap="round" />
-              <rect x={-14} y={-52} width={28} height={104} fill={P.stone} opacity={0.5} />
+            <g transform={`translate(0 ${-HAMMER_REST_SHIFT})`}>
+              <line x1={1236} y1={668} x2={978} y2={605} stroke={P.outline} strokeWidth={32} strokeLinecap="round" />
+              <line x1={1236} y1={668} x2={978} y2={605} stroke={P.leather} strokeWidth={22} strokeLinecap="round" />
+              <line x1={1230} y1={662} x2={984} y2={602} stroke={P.woodLight} strokeWidth={6} strokeLinecap="round" opacity={0.7} />
+              {GRIP_WRAPS.map(([x1, y1, x2, y2]) => (
+                <line key={x1} x1={x1} y1={y1} x2={x2} y2={y2} stroke={P.cream} strokeWidth={3} opacity={0.75} />
+              ))}
+              <circle cx={1236} cy={668} r={16} fill={P.iron} stroke={P.outline} strokeWidth={4} />
+              <g transform="translate(978 605) rotate(-76)">
+                <rect x={-76} y={-52} width={152} height={104} rx={12} fill={P.outline} />
+                <rect x={-72} y={-48} width={144} height={96} rx={10} fill="url(#forge-hammer-steel)" />
+                <rect x={-72} y={-48} width={18} height={96} rx={4} fill={P.ironLight} />
+                <rect x={54} y={-48} width={18} height={96} rx={4} fill={P.ironLight} />
+                <line x1={-66} y1={-40} x2={66} y2={-40} stroke={P.ironHighlight} strokeWidth={6} strokeLinecap="round" />
+                <rect x={-14} y={-52} width={28} height={104} fill={P.stone} opacity={0.5} />
+              </g>
             </g>
           </g>
         </g>
