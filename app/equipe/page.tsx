@@ -2,13 +2,13 @@ import React from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Dice6 } from "lucide-react";
+import { Dice6, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ForgeBand } from "@/components/ui/forge-band";
 import { AnvilSpot } from "@/components/ui/spot-art";
-import { GithubIcon, LinkedinIcon, TwitterIcon } from "@/components/ui/icons";
+import { BehanceIcon, GithubIcon, LinkedinIcon, TwitterIcon } from "@/components/ui/icons";
 import { initialTeamMembers } from "@/data/team.mock";
 
 export const metadata: Metadata = {
@@ -62,12 +62,27 @@ export default function EquipePage() {
                 <p className="text-xs leading-relaxed text-[#A1A1A1]">{member.bio}</p>
 
                 <div className="flex flex-wrap items-center justify-center gap-2 border-t border-[#3a3a3a] pt-3 text-xs sm:justify-between">
-                  <span className="flex items-center gap-1 text-[#717171]">
-                    <Dice6 className="h-3.5 w-3.5 text-[#ff2400]" />
-                    Jogo favorito: <strong className="text-[#D1D1D1]">{member.favoriteSystemOrGame}</strong>
-                  </span>
+                  {member.favoriteSystemOrGame ? (
+                    <span className="flex items-center gap-1 text-[#717171]">
+                      <Dice6 className="h-3.5 w-3.5 text-[#ff2400]" />
+                      Jogo favorito: <strong className="text-[#D1D1D1]">{member.favoriteSystemOrGame}</strong>
+                    </span>
+                  ) : (
+                    <div />
+                  )}
 
                   <div className="flex items-center gap-2 text-[#A1A1A1]">
+                    {member.portfolioUrl && (
+                      <a
+                        href={member.portfolioUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="transition-colors hover:text-[#faf3e0]"
+                        aria-label="Portfólio"
+                      >
+                        <Globe className="h-4 w-4" />
+                      </a>
+                    )}
                     {member.githubUrl && (
                       <a
                         href={member.githubUrl}
@@ -88,6 +103,17 @@ export default function EquipePage() {
                         aria-label="LinkedIn"
                       >
                         <LinkedinIcon className="h-4 w-4" />
+                      </a>
+                    )}
+                    {member.behanceUrl && (
+                      <a
+                        href={member.behanceUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="transition-colors hover:text-[#faf3e0]"
+                        aria-label="Behance"
+                      >
+                        <BehanceIcon className="h-4 w-4" />
                       </a>
                     )}
                     {member.twitterUrl && (
