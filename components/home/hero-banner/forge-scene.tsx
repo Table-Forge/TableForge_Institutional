@@ -524,6 +524,13 @@ function HazeArt() {
   );
 }
 
+const ANVIL_SCALE = 1.9;
+const ANVIL_OFFSET = { x: 38.4, y: -45.3 };
+const ANVIL_SILHOUETTE =
+  "M248,91.3V67H80v8H9c0,0,10.7,40.6,67.3,40.6c30.3,0,34.4,12.7,34.4,19.1c0,8.4-5.1,21.9-36.7,32.8V191h38.7c6.8-5.2,15.3-8.2,24.5-8.2s17.7,3.1,24.5,8.2H201c0,0,0-15.1,0-22.9c-23.4-7.7-38.7-20.4-38.7-34.8C162.3,110.6,200.1,92.5,248,91.3z";
+const ANVIL_FACE_EDGE = "M88,79v-4h152v4H88z";
+const ANVIL_HORN_EDGE = "M80,87c-52,0-52-4-52-4h52C80,83,80,85.4,80,87z";
+
 function AnvilArt() {
   return (
     <svg viewBox="0 0 700 460" className="block h-full w-full overflow-visible">
@@ -544,25 +551,23 @@ function AnvilArt() {
           <stop offset="100%" stopColor={P.crimson} stopOpacity={0} />
         </radialGradient>
       </defs>
-      <ellipse cx={350} cy={446} rx={280} ry={16} fill={P.black} opacity={0.7} />
-      <path d="M232 214 H468 L502 442 H198 Z" fill={P.woodLight} stroke={P.outline} strokeWidth={5} strokeLinejoin="round" />
-      <path d="M300 240 Q310 330 296 420 M400 240 Q392 330 404 420" stroke={P.woodDeep} strokeWidth={4} fill="none" opacity={0.8} />
-      <rect x={222} y={286} width={256} height={18} fill={P.iron} stroke={P.outline} strokeWidth={3} />
-      <rect x={208} y={392} width={284} height={18} fill={P.iron} stroke={P.outline} strokeWidth={3} />
+      <ellipse cx={300} cy={446} rx={250} ry={16} fill={P.black} opacity={0.7} />
+      <path d="M205 314 H395 L425 442 H175 Z" fill={P.woodLight} stroke={P.outline} strokeWidth={5} strokeLinejoin="round" />
+      <path d="M262 340 Q270 400 258 430 M338 340 Q332 400 344 430" stroke={P.woodDeep} strokeWidth={4} fill="none" opacity={0.8} />
+      <rect x={196} y={352} width={208} height={18} fill={P.iron} stroke={P.outline} strokeWidth={3} />
+      <rect x={184} y={408} width={232} height={18} fill={P.iron} stroke={P.outline} strokeWidth={3} />
 
-      <rect x={196} y={196} width={308} height={20} rx={3} fill={P.stoneMid} stroke={P.outline} strokeWidth={4} />
-      <path d="M236 196 L250 134 H450 L464 196 Z" fill={P.stoneMid} stroke={P.outline} strokeWidth={4} />
-      <path d="M150 82 H570 V140 H150 Z" fill="url(#forge-anvil-iron)" stroke={P.outline} strokeWidth={4} />
-      <path
-        d="M150 82 C104 86 66 100 30 118 C66 130 106 140 150 140 Z"
-        fill="url(#forge-anvil-iron)"
-        stroke={P.outline}
-        strokeWidth={4}
-        strokeLinejoin="round"
-      />
-      <path d="M152 84 H568" stroke={P.ironHighlight} strokeWidth={5} />
-      <rect x={498} y={88} width={16} height={16} fill={P.outline} />
-      <circle cx={546} cy={96} r={6} fill={P.outline} />
+      <g transform={`translate(${ANVIL_OFFSET.x} ${ANVIL_OFFSET.y}) scale(${ANVIL_SCALE})`}>
+        <path
+          d={ANVIL_SILHOUETTE}
+          fill="url(#forge-anvil-iron)"
+          stroke={P.outline}
+          strokeWidth={2.2}
+          strokeLinejoin="round"
+        />
+        <path d={ANVIL_FACE_EDGE} fill={P.ironHighlight} opacity={0.7} />
+        <path d={ANVIL_HORN_EDGE} fill={P.ironHighlight} opacity={0.5} />
+      </g>
 
       <ellipse data-forge="ingot-glow" cx={360} cy={84} rx={130} ry={30} fill="url(#forge-ingot-glow)" />
       <g data-forge="ingot">
@@ -570,9 +575,9 @@ function AnvilArt() {
         <rect data-forge="ingot-heat" x={300} y={58} width={120} height={24} rx={4} fill={P.hot} opacity={0} />
       </g>
 
-      <path d="M214 300 L118 442 M226 306 L142 448" stroke={P.iron} strokeWidth={9} strokeLinecap="round" />
-      <path d="M214 300 L200 270 M226 306 L236 274" stroke={P.iron} strokeWidth={9} strokeLinecap="round" />
-      <circle cx={200} cy={322} r={6} fill={P.ironLight} stroke={P.outline} strokeWidth={2} />
+      <path d="M200 320 L112 442 M212 326 L136 448" stroke={P.iron} strokeWidth={9} strokeLinecap="round" />
+      <path d="M200 320 L188 292 M212 326 L222 294" stroke={P.iron} strokeWidth={9} strokeLinecap="round" />
+      <circle cx={188} cy={340} r={6} fill={P.ironLight} stroke={P.outline} strokeWidth={2} />
 
       <path d="M556 336 L574 442 H666 L684 336 Z" fill={P.stoneMid} stroke={P.outline} strokeWidth={4} strokeLinejoin="round" />
       <path d="M562 372 H678 M570 412 H670" stroke={P.iron} strokeWidth={5} />
