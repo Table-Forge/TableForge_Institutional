@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const AUTH_STORAGE_KEY = "tableforge_auth";
+import { AUTH_STORAGE_KEY } from "@/store/slices/auth-slice";
 
 const getBaseUrl = () => {
   if (process.env.NEXT_PUBLIC_API_URL) {
@@ -20,10 +20,7 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   if (typeof window === "undefined") return config;
 
-  const authDataSerialized =
-    localStorage.getItem(AUTH_STORAGE_KEY) ||
-    localStorage.getItem("auth_data") ||
-    localStorage.getItem("tableforge_token");
+  const authDataSerialized = localStorage.getItem(AUTH_STORAGE_KEY);
 
   if (authDataSerialized) {
     try {
@@ -57,9 +54,6 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401 && typeof window !== "undefined") {
       localStorage.removeItem(AUTH_STORAGE_KEY);
-      localStorage.removeItem("auth_data");
-      localStorage.removeItem("tableforge_token");
-      localStorage.removeItem("tableforge_user");
       window.dispatchEvent(new Event("tableforge_auth_change"));
     }
     return Promise.reject(error);
