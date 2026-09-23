@@ -54,7 +54,7 @@ export function HeroBanner() {
   return (
     <section
       ref={rootRef}
-      className="relative isolate h-[calc(100svh-5rem)] min-h-[560px] w-full select-none overflow-hidden border-b border-[#1E1E1E] bg-[#000000] lg:h-[calc(100svh-6rem)]"
+      className="relative isolate h-svh min-h-[560px] w-full select-none overflow-hidden border-b border-[#1E1E1E] bg-[#000000]"
     >
       <ForgeScene key={`scene-${replayToken}`} />
 
@@ -64,7 +64,7 @@ export function HeroBanner() {
         bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0.35)_45%,transparent_72%)] lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.82)_0%,rgba(0,0,0,0.5)_40%,transparent_68%)]
         "
       >
-        <div className="pointer-events-none absolute inset-0 mx-auto flex h-full max-w-7xl items-center">
+        <div className="pointer-events-none absolute inset-0 mx-auto flex h-full max-w-7xl items-center pt-20 lg:pt-24">
           <div className="relative max-w-xl space-y-6 text-center lg:text-left">
             <Badge variant="primary" size="md">
               <Smartphone className="h-3.5 w-3.5 text-[#ff2400]" />

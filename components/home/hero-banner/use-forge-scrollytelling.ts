@@ -73,6 +73,7 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>, r
       const pose = { hammer: 0, lift: 0, dieX: 1, dieY: 1 };
       const hammer = one("hammer");
       const die = one("die");
+      const header = document.querySelector("header");
 
       const applyPose = () => {
         hammer.setAttribute("transform", `translate(0 ${-pose.lift}) rotate(${pose.hammer} ${GRIP.x} ${GRIP.y})`);
@@ -233,6 +234,12 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>, r
             { autoAlpha: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" },
             0.45,
           )
+          .fromTo(
+            header,
+            { autoAlpha: 0, yPercent: -100 },
+            { autoAlpha: 1, yPercent: 0, duration: 0.6, ease: "power3.out" },
+            0.45,
+          )
           .fromTo(one("controls"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0.6)
           .call(playForgeStrike, undefined, 0.14);
 
@@ -318,7 +325,6 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>, r
         return timeline;
       };
 
-      const header = document.querySelector("header");
       const matchMedia = gsap.matchMedia();
 
       matchMedia.add(
@@ -369,7 +375,7 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>, r
           ScrollTrigger.create({
             animation: master,
             trigger: root,
-            start: () => `top ${header?.getBoundingClientRect().height ?? 0}px`,
+            start: "top top",
             end: SCROLL_DISTANCE,
             pin: true,
             scrub: 1.5,
@@ -407,6 +413,7 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>, r
         window.removeEventListener("keydown", blockScrollKeys);
         window.removeEventListener("scroll", holdScrollPosition);
         renderer?.destroy();
+        gsap.set(header, { clearProps: "opacity,visibility,transform" });
       };
     },
     { scope: rootRef, dependencies: [replayToken], revertOnUpdate: true },

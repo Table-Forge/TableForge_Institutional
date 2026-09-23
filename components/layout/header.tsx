@@ -22,6 +22,7 @@ const navLinks = [
 
 export function Header() {
   const pathname = usePathname();
+  const awaitsHeroReveal = pathname === "/";
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [failedAvatarUrl, setFailedAvatarUrl] = useState<string | null>(null);
   const { user, isAuthenticated, openAuthModal, logout } = useAuth();
@@ -34,7 +35,11 @@ export function Header() {
     : `@${displayName.toLowerCase().replace(/\s+/g, "")}`;
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-[#2D2D2D] bg-[#000000]/90 backdrop-blur-md">
+    <header
+      className={`top-0 z-40 w-full border-b border-[#2D2D2D] bg-[#000000]/90 backdrop-blur-md ${
+        awaitsHeroReveal ? "invisible fixed opacity-0" : "sticky"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 lg:h-24 flex items-center justify-between">
         <Link href="/" className="inline-flex items-center group py-2">
           <Logo variant="split" priority />
