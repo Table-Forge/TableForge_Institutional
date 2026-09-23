@@ -372,7 +372,7 @@ export function useForgeScrollytelling(rootRef: RefObject<HTMLElement | null>, r
             start: () => `top ${header?.getBoundingClientRect().height ?? 0}px`,
             end: SCROLL_DISTANCE,
             pin: true,
-            scrub: 0.5,
+            scrub: 1.5,
             anticipatePin: 1,
             invalidateOnRefresh: true,
             onToggle: syncAtmosphere(ambient),
